@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gaby Hernandez</title>
+  <meta name="description" content="Computer scientist, cloud engineer, and builder of systems that connect unlikely things. NASA, AWS, Chevron, EPAM.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <span class="nav-coords">29.7858 N, 95.8245 W</span>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero" id="top">
+    <canvas id="terrain-canvas"></canvas>
+    <div class="hero-content">
+      <h1 class="reveal">I build systems at the edges where things don't usually connect.</h1>
+      <p class="hero-sub reveal" data-delay="1">
+        I'm Gaby. Computer scientist. I've taught astronauts how electrical systems work, wrangled
+        sensor data from oil fields, built cloud infrastructure at AWS, and taken drive-through
+        orders at 6 AM. These days I wire AI agents into commodity trading platforms at EPAM.
+      </p>
+      <div class="hero-actions reveal" data-delay="2">
+        <a href="#work" class="btn-primary">See my work</a>
+        <a href="#about" class="btn-ghost">The full picture</a>
+      </div>
+    </div>
+    <div class="hero-status reveal" data-delay="3">
+      <div class="status-item">
+        <span class="status-label">Now</span>
+        <span class="status-value">Consulting Analyst, EPAM</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Before</span>
+        <span class="status-value">NASA · AWS · Chevron</span>
+      </div>
+      <div class="status-item">
+        <span class="status-label">Education</span>
+        <span class="status-value">B.S. Computer Science, UH</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work Section -->
+  <section class="section work-section" id="work">
+    <div class="section-header reveal">
+      <span class="section-label">Selected work</span>
+    </div>
+
+    <div class="project-grid">
+      <article class="project-card reveal">
+        <div class="project-tags">
+          <span class="tag tag-gold">MCP</span>
+          <span class="tag tag-blue">AWS</span>
+          <span class="tag tag-rose">AI</span>
+        </div>
+        <h3 class="project-title">AI agent for ETRM systems</h3>
+        <p class="project-desc">
+          Connecting EPAM's AI platform to Allegro Horizon for natural gas trade workflows
+          through a custom MCP server. Cloud infrastructure scoping, cost modeling, and architecture
+          design for production deployment.
+        </p>
+        <span class="project-context">EPAM / Essentia Advisory, 2026</span>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="project-tags">
+          <span class="tag tag-blue">ECS</span>
+          <span class="tag tag-blue">Route 53</span>
+          <span class="tag tag-gold">Lambda</span>
+        </div>
+        <h3 class="project-title">Multi-region failover infrastructure</h3>
+        <p class="project-desc">
+          Containerized application deployed across two AWS regions with Auto Scaling Groups
+          and automated health checks. Built a serverless ETL pipeline processing financial
+          documents from S3 into DynamoDB.
+        </p>
+        <span class="project-context">Amazon Web Services, 2025</span>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="project-tags">
+          <span class="tag tag-gold">Python</span>
+          <span class="tag tag-rose">MariaDB</span>
+        </div>
+        <h3 class="project-title">EVA geolocation analysis tool</h3>
+        <p class="project-desc">
+          Automated spacewalk scheduling by parsing astronaut coordinate data and running
+          proximity analysis to identify concurrent EVA opportunities. Migrated 500+ legacy
+          MediaWiki queries to an optimized Cargo database.
+        </p>
+        <span class="project-context">NASA Johnson Space Center, 2025</span>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="project-tags">
+          <span class="tag tag-blue">IoT</span>
+          <span class="tag tag-gold">Pandas</span>
+          <span class="tag tag-rose">C++</span>
+        </div>
+        <h3 class="project-title">Oil field sensor data pipeline</h3>
+        <p class="project-desc">
+          End-to-end ETL processing 32,000+ data points per sensor from 10,000+ stations.
+          Built C++ algorithms for 3-axis accelerometer orientation calculations
+          and a JavaScript visualization dashboard for predictive maintenance.
+        </p>
+        <span class="project-context">Chevron, 2024</span>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="project-tags">
+          <span class="tag tag-gold">ServiceNow</span>
+          <span class="tag tag-blue">Security</span>
+        </div>
+        <h3 class="project-title">Mission control security systems</h3>
+        <p class="project-desc">
+          Managed firewall change requests and infrastructure security reviews for NASA's
+          Mission Control Center systems. Eliminated an entire CDR design phase by demonstrating
+          existing security controls already met requirements.
+        </p>
+        <span class="project-context">NASA Johnson Space Center, 2025</span>
+      </article>
+
+      <article class="project-card reveal">
+        <div class="project-tags">
+          <span class="tag tag-gold">Node.js</span>
+          <span class="tag tag-rose">MySQL</span>
+          <span class="tag tag-blue">Twilio</span>
+        </div>
+        <h3 class="project-title">Library management system</h3>
+        <p class="project-desc">
+          RESTful API with 40+ endpoints, JWT authentication, and a normalized 15-table schema.
+          Event-driven SMS notifications via Twilio for item availability alerts.
+        </p>
+        <span class="project-context">Personal project</span>
+      </article>
+    </div>
+
+    <div class="work-cta reveal">
+      <a href="https://github.com/Gabyc5" target="_blank" rel="noopener" class="btn-ghost">
+        More on GitHub <span class="arrow">&nearr;</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="section about-section" id="about">
+    <div class="section-header reveal">
+      <span class="section-label">The full picture</span>
+    </div>
+
+    <div class="about-content">
+      <div class="about-lead reveal">
+        <h2>Before I wrote my first line of code, I had already worked five different jobs.</h2>
+      </div>
+
+      <div class="about-body reveal">
+        <p>
+          Drive-through cashier. Catering crew. Phone sales. Tutoring algebra at a community center.
+          My family taught me to start working early and figure things out along the way.
+          It gave me something useful: I know how to talk to people who
+          think nothing like me, and I know how to learn fast when there's no other option.
+        </p>
+        <p>
+          I studied computer science and mathematics at the University of Houston, graduated with
+          a 3.97, and spent three semesters at NASA's Johnson Space Center before I turned 22.
+          I interned at Chevron twice, building IoT data pipelines and cloud infrastructure
+          for oil field operations. I spent a summer at AWS in Seattle, architecting multi-region
+          systems and learning how enterprise clients think about resilience.
+        </p>
+        <p>
+          Right now I'm at EPAM Systems working in commodity and energy technology.
+          Most of my time goes to connecting AI platforms to legacy ETRM systems, scoping AWS
+          infrastructure costs, and figuring out how to make tools built in different decades
+          talk to each other. Cloud engineering, energy markets, applied AI. That's the work.
+        </p>
+      </div>
+
+      <div class="about-certs reveal">
+        <span class="cert-label">Certifications</span>
+        <div class="cert-list">
+          <span class="cert">AWS Solutions Architect Associate</span>
+          <span class="cert">CompTIA Security+</span>
+          <span class="cert">CompTIA A+</span>
+          <span class="cert">AWS AI Practitioner</span>
+        </div>
+      </div>
+
+      <div class="about-skills reveal">
+        <span class="cert-label">Tools I reach for</span>
+        <div class="cert-list">
+          <span class="cert">C++</span>
+          <span class="cert">Python</span>
+          <span class="cert">JavaScript</span>
+          <span class="cert">SQL</span>
+          <span class="cert">AWS</span>
+          <span class="cert">Docker</span>
+          <span class="cert">Git</span>
+          <span class="cert">Linux</span>
+          <span class="cert">ServiceNow</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section contact-section" id="contact">
+    <div class="contact-inner reveal">
+      <h2>Say hello.</h2>
+      <p>I'm always open to interesting conversations about cloud infrastructure,
+        energy technology, or whatever else is on your mind.</p>
+      <a href="mailto:gcg.hdezg@gmail.com" class="contact-email">gcg.hdezg@gmail.com</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Gaby Hernandez</span>
+      <div class="footer-links">
+        <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:gcg.hdezg@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="js/terrain.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
