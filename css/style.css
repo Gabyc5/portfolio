@@ -3,7 +3,6 @@
    Dusk Topography theme
    ============================================ */
 
-/* --- Reset & Variables --- */
 *, *::before, *::after {
   margin: 0;
   padding: 0;
@@ -73,7 +72,6 @@ img {
   transform: translateY(0);
 }
 
-/* Staggered delays via data-delay attribute */
 .reveal[data-delay="1"] { transition-delay: 0.15s; }
 .reveal[data-delay="2"] { transition-delay: 0.3s; }
 .reveal[data-delay="3"] { transition-delay: 0.45s; }
@@ -195,6 +193,7 @@ nav.scrolled {
 }
 
 .btn-primary {
+  display: inline-block;
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 500;
@@ -212,6 +211,7 @@ nav.scrolled {
 }
 
 .btn-ghost {
+  display: inline-block;
   font-family: var(--font-body);
   font-size: 13px;
   color: var(--accent-gold);
@@ -275,7 +275,11 @@ nav.scrolled {
 }
 
 .section-header {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+}
+
+.section-header-secondary {
+  margin-top: 3rem;
 }
 
 .section-label {
@@ -285,14 +289,36 @@ nav.scrolled {
   letter-spacing: 0.12em;
 }
 
-/* --- Work / Projects --- */
+/* --- Featured Work --- */
 .work-section {
   padding-top: 6rem;
 }
 
+.featured-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 1rem;
+}
+
+.featured-card {
+  padding: 2rem !important;
+}
+
+.featured-card .project-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.featured-card .project-desc {
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+/* --- Project Grid (Selected Work) --- */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
 }
 
@@ -421,9 +447,38 @@ nav.scrolled {
   border: 0.5px solid rgba(255,255,255,0.06);
 }
 
+/* --- Freelance CTA --- */
+.cta-section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+.cta-card {
+  background: var(--bg-mid);
+  border: 1px solid rgba(201, 168, 124, 0.2);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  max-width: 600px;
+}
+
+.cta-card h3 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--text-bright);
+  margin-bottom: 1rem;
+}
+
+.cta-card p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
 /* --- Contact Section --- */
 .contact-section {
-  padding-top: 6rem;
+  padding-top: 4rem;
   padding-bottom: 4rem;
 }
 
@@ -447,16 +502,33 @@ nav.scrolled {
 }
 
 .contact-email {
+  display: inline-block;
   font-family: var(--font-display);
   font-size: 18px;
   color: var(--accent-gold);
   border-bottom: 1px solid transparent;
   transition: border-color 0.3s;
   padding-bottom: 2px;
+  margin-bottom: 1.5rem;
 }
 
 .contact-email:hover {
   border-color: var(--accent-gold);
+}
+
+.contact-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.contact-links a {
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: color 0.3s;
+}
+
+.contact-links a:hover {
+  color: var(--accent-gold);
 }
 
 /* --- Footer --- */
@@ -496,6 +568,16 @@ footer {
 }
 
 /* --- Responsive --- */
+@media (max-width: 900px) {
+  .featured-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   nav {
     padding: 1rem 1.25rem;
@@ -530,8 +612,12 @@ footer {
     gap: 12px;
   }
 
-  .project-card {
-    padding: 1.25rem;
+  .featured-card {
+    padding: 1.5rem !important;
+  }
+
+  .cta-card {
+    padding: 1.5rem;
   }
 
   footer {

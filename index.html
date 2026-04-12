@@ -4,7 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gaby Hernandez</title>
-  <meta name="description" content="Computer scientist, cloud engineer, and builder of systems that connect unlikely things. NASA, AWS, Chevron, EPAM.">
+  <meta name="description" content="AI agent systems and cloud infrastructure for enterprise environments. NASA, AWS, Chevron.">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Gaby Hernandez">
+  <meta property="og:description" content="AI agent systems and cloud infrastructure for enterprise environments.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gabyhernandez.dev">
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9650;</text></svg>">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
@@ -29,9 +39,10 @@
     <div class="hero-content">
       <h1 class="reveal">I build systems at the edges where things don't usually connect.</h1>
       <p class="hero-sub reveal" data-delay="1">
-        I'm Gaby. Computer scientist. I've taught astronauts how electrical systems work, wrangled
-        sensor data from oil fields, built cloud infrastructure at AWS, and taken drive-through
-        orders at 6 AM. These days I wire AI agents into commodity trading platforms at EPAM.
+        I'm Gaby. I build AI agent systems and cloud infrastructure that connect
+        enterprise platforms to internal tools using MCP protocol, AWS, and custom
+        API integrations. Before this, I built mission-critical systems at NASA,
+        cloud infrastructure at AWS, and sensor data pipelines at Chevron.
       </p>
       <div class="hero-actions reveal" data-delay="2">
         <a href="#work" class="btn-primary">See my work</a>
@@ -41,11 +52,11 @@
     <div class="hero-status reveal" data-delay="3">
       <div class="status-item">
         <span class="status-label">Now</span>
-        <span class="status-value">Consulting Analyst, EPAM</span>
+        <span class="status-value">Cloud &amp; AI Infrastructure</span>
       </div>
       <div class="status-item">
         <span class="status-label">Before</span>
-        <span class="status-value">NASA · AWS · Chevron</span>
+        <span class="status-value">NASA &middot; AWS &middot; Chevron</span>
       </div>
       <div class="status-item">
         <span class="status-label">Education</span>
@@ -56,42 +67,57 @@
 
   <!-- Work Section -->
   <section class="section work-section" id="work">
+
+    <!-- Featured Work -->
     <div class="section-header reveal">
-      <span class="section-label">Selected work</span>
+      <span class="section-label">Featured work</span>
     </div>
 
-    <div class="project-grid">
-      <article class="project-card reveal">
+    <div class="featured-grid">
+      <article class="project-card featured-card reveal" id="project-ai-agent">
         <div class="project-tags">
           <span class="tag tag-gold">MCP</span>
           <span class="tag tag-blue">AWS</span>
           <span class="tag tag-rose">AI</span>
+          <span class="tag tag-gold">OAuth 2.0</span>
         </div>
-        <h3 class="project-title">AI agent for ETRM systems</h3>
+        <h3 class="project-title">Enterprise AI agent integration</h3>
         <p class="project-desc">
-          Connecting EPAM's AI platform to Allegro Horizon for natural gas trade workflows
-          through a custom MCP server. Cloud infrastructure scoping, cost modeling, and architecture
-          design for production deployment.
+          Designed and built an AI agent workflow connecting an enterprise platform to internal
+          tools via a custom MCP server. Implemented OAuth 2.0/OIDC authentication with PKCE
+          via AWS Cognito, zero-inbound-port security through Cloudflare Tunnel, and Streamable
+          HTTP transport. Scoped cloud infrastructure, cost modeling, and architecture for
+          production deployment.
         </p>
-        <span class="project-context">EPAM / Essentia Advisory, 2026</span>
+        <span class="project-context">Enterprise Consulting, 2026</span>
       </article>
 
-      <article class="project-card reveal">
+      <article class="project-card featured-card reveal" id="project-multi-region">
         <div class="project-tags">
           <span class="tag tag-blue">ECS</span>
           <span class="tag tag-blue">Route 53</span>
           <span class="tag tag-gold">Lambda</span>
+          <span class="tag tag-rose">WAF</span>
         </div>
         <h3 class="project-title">Multi-region failover infrastructure</h3>
         <p class="project-desc">
-          Containerized application deployed across two AWS regions with Auto Scaling Groups
-          and automated health checks. Built a serverless ETL pipeline processing financial
-          documents from S3 into DynamoDB.
+          Containerized application deployed across two AWS regions with Auto Scaling Groups,
+          ALBs, and automated health checks achieving ~99.99% availability through Route 53
+          failover routing. Built a serverless ETL pipeline processing financial documents
+          from S3 into DynamoDB. Configured CloudWatch monitoring and WAF security rules
+          achieving 100% block rate against simulated attack patterns.
         </p>
         <span class="project-context">Amazon Web Services, 2025</span>
       </article>
+    </div>
 
-      <article class="project-card reveal">
+    <!-- Selected Work -->
+    <div class="section-header section-header-secondary reveal">
+      <span class="section-label">Selected work</span>
+    </div>
+
+    <div class="project-grid">
+      <article class="project-card reveal" id="project-eva">
         <div class="project-tags">
           <span class="tag tag-gold">Python</span>
           <span class="tag tag-rose">MariaDB</span>
@@ -105,7 +131,7 @@
         <span class="project-context">NASA Johnson Space Center, 2025</span>
       </article>
 
-      <article class="project-card reveal">
+      <article class="project-card reveal" id="project-sensor">
         <div class="project-tags">
           <span class="tag tag-blue">IoT</span>
           <span class="tag tag-gold">Pandas</span>
@@ -120,7 +146,7 @@
         <span class="project-context">Chevron, 2024</span>
       </article>
 
-      <article class="project-card reveal">
+      <article class="project-card reveal" id="project-security">
         <div class="project-tags">
           <span class="tag tag-gold">ServiceNow</span>
           <span class="tag tag-blue">Security</span>
@@ -132,20 +158,6 @@
           existing security controls already met requirements.
         </p>
         <span class="project-context">NASA Johnson Space Center, 2025</span>
-      </article>
-
-      <article class="project-card reveal">
-        <div class="project-tags">
-          <span class="tag tag-gold">Node.js</span>
-          <span class="tag tag-rose">MySQL</span>
-          <span class="tag tag-blue">Twilio</span>
-        </div>
-        <h3 class="project-title">Library management system</h3>
-        <p class="project-desc">
-          RESTful API with 40+ endpoints, JWT authentication, and a normalized 15-table schema.
-          Event-driven SMS notifications via Twilio for item availability alerts.
-        </p>
-        <span class="project-context">Personal project</span>
       </article>
     </div>
 
@@ -171,21 +183,22 @@
         <p>
           Drive-through cashier. Catering crew. Phone sales. Tutoring algebra at a community center.
           My family taught me to start working early and figure things out along the way.
-          It gave me something useful: I know how to talk to people who
-          think nothing like me, and I know how to learn fast when there's no other option.
+          It gave me something useful: I know how to talk to people who think nothing like me,
+          and I know how to learn fast when there's no other option.
         </p>
         <p>
           I studied computer science and mathematics at the University of Houston, graduated with
           a 3.97, and spent three semesters at NASA's Johnson Space Center before I turned 22.
           I interned at Chevron twice, building IoT data pipelines and cloud infrastructure
           for oil field operations. I spent a summer at AWS in Seattle, architecting multi-region
-          systems and learning how enterprise clients think about resilience.
+          systems and learning how large-scale clients think about resilience.
         </p>
         <p>
-          Right now I'm at EPAM Systems working in commodity and energy technology.
-          Most of my time goes to connecting AI platforms to legacy ETRM systems, scoping AWS
-          infrastructure costs, and figuring out how to make tools built in different decades
-          talk to each other. Cloud engineering, energy markets, applied AI. That's the work.
+          Now I build AI agent integrations and cloud infrastructure for enterprise clients.
+          Most of my time goes toward connecting platforms that were never designed to work together,
+          scoping AWS costs, and writing the glue code (MCP servers, API adapters, auth flows)
+          that makes it all run. I care about work that requires both engineering depth
+          and the ability to communicate across teams.
         </p>
       </div>
 
@@ -193,8 +206,6 @@
         <span class="cert-label">Certifications</span>
         <div class="cert-list">
           <span class="cert">AWS Solutions Architect Associate</span>
-          <span class="cert">CompTIA Security+</span>
-          <span class="cert">CompTIA A+</span>
           <span class="cert">AWS AI Practitioner</span>
         </div>
       </div>
@@ -210,9 +221,22 @@
           <span class="cert">Docker</span>
           <span class="cert">Git</span>
           <span class="cert">Linux</span>
-          <span class="cert">ServiceNow</span>
+          <span class="cert">Terraform</span>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Freelance CTA -->
+  <section class="section cta-section" id="services">
+    <div class="cta-card reveal">
+      <h3>Available for select projects</h3>
+      <p>
+        I take on freelance work in AI agent development, cloud infrastructure (AWS),
+        and enterprise system integration. If you need help connecting internal platforms,
+        building on AWS, or automating workflows with MCP protocol, let's talk.
+      </p>
+      <a href="#contact" class="btn-primary">Get in touch</a>
     </div>
   </section>
 
@@ -220,9 +244,13 @@
   <section class="section contact-section" id="contact">
     <div class="contact-inner reveal">
       <h2>Say hello.</h2>
-      <p>I'm always open to interesting conversations about cloud infrastructure,
-        energy technology, or whatever else is on your mind.</p>
+      <p>I'm open to conversations about cloud infrastructure,
+        AI agent development, or interesting problems in general.</p>
       <a href="mailto:gcg.hdezg@gmail.com" class="contact-email">gcg.hdezg@gmail.com</a>
+      <div class="contact-links">
+        <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+      </div>
     </div>
   </section>
 
