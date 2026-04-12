@@ -1,7 +1,7 @@
-// main.js — Scroll reveal, nav background, smooth interactions
+// main.js
 (function () {
 
-  // --- Scroll Reveal ---
+  // Scroll reveal
   var reveals = document.querySelectorAll('.reveal');
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
@@ -19,30 +19,33 @@
     observer.observe(el);
   });
 
-  // --- Nav scroll state ---
+  // Nav scroll state
   var nav = document.getElementById('nav');
-  var scrollThreshold = 60;
+  if (nav && !nav.classList.contains('scrolled')) {
+    var scrollThreshold = 60;
 
-  function updateNav() {
-    if (window.scrollY > scrollThreshold) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
+    function updateNav() {
+      if (window.scrollY > scrollThreshold) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
     }
+
+    window.addEventListener('scroll', updateNav, { passive: true });
+    updateNav();
   }
 
-  window.addEventListener('scroll', updateNav, { passive: true });
-  updateNav();
-
-  // --- Smooth scroll for anchor links ---
-  document.querySelectorAll('a[href^="#"]').forEach(function (link) {
-    link.addEventListener('click', function (e) {
-      var target = document.querySelector(this.getAttribute('href'));
+  // Smooth scroll via event delegation (catches all anchor clicks including CTA)
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('a[href^="#"]');
+    if (link) {
+      var target = document.querySelector(link.getAttribute('href'));
       if (target) {
         e.preventDefault();
         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
-    });
+    }
   });
 
 })();

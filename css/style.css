@@ -1,6 +1,6 @@
 /* ============================================
    GABY HERNANDEZ — PORTFOLIO
-   Dusk Topography theme
+   Corporate Goth + PNW palette
    ============================================ */
 
 *, *::before, *::after {
@@ -10,20 +10,22 @@
 }
 
 :root {
-  --bg-deep: #3A3533;
-  --bg-mid: #443F3C;
-  --bg-card: #4D4745;
-  --bg-surface: #564F4D;
-  --text-bright: #F2ECE5;
-  --text-body: #D4CBC3;
-  --text-muted: #A89E96;
-  --text-faint: #857B75;
-  --accent-gold: #C9A87C;
-  --accent-gold-dim: rgba(201, 168, 124, 0.12);
-  --accent-blue: #7BA3B0;
-  --accent-blue-dim: rgba(123, 163, 176, 0.12);
-  --accent-rose: #B07A7A;
-  --accent-rose-dim: rgba(176, 122, 122, 0.10);
+  --bg-deep: #1A1A1D;
+  --bg-mid: #222225;
+  --bg-card: #2A2A2E;
+  --bg-surface: #323236;
+  --text-bright: #F0ECE6;
+  --text-body: #CCC5BB;
+  --text-muted: #A39B92;
+  --text-faint: #7A736C;
+  --accent-red: #943A3A;
+  --accent-red-bright: #B04A4A;
+  --accent-red-dim: rgba(148, 58, 58, 0.15);
+  --accent-green: #4A7C5C;
+  --accent-green-bright: #5A9A6E;
+  --accent-green-dim: rgba(74, 124, 92, 0.15);
+  --accent-cream: #D4C9B8;
+  --accent-cream-dim: rgba(212, 201, 184, 0.1);
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Outfit', system-ui, sans-serif;
   --radius: 6px;
@@ -51,8 +53,8 @@ a {
 }
 
 ::selection {
-  background: var(--accent-gold);
-  color: var(--bg-deep);
+  background: var(--accent-red);
+  color: var(--text-bright);
 }
 
 img {
@@ -91,7 +93,7 @@ nav {
 }
 
 nav.scrolled {
-  background: rgba(58, 53, 51, 0.92);
+  background: rgba(26, 26, 29, 0.94);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   box-shadow: 0 1px 0 rgba(255,255,255,0.04);
@@ -125,12 +127,12 @@ nav.scrolled {
   left: 0;
   width: 0;
   height: 1px;
-  background: var(--accent-gold);
+  background: var(--accent-red-bright);
   transition: width 0.3s ease;
 }
 
 .nav-links a:hover {
-  color: var(--accent-gold);
+  color: var(--accent-red-bright);
 }
 
 .nav-links a:hover::after {
@@ -185,6 +187,11 @@ nav.scrolled {
   margin-bottom: 2.5rem;
 }
 
+.name-highlight {
+  color: var(--accent-red-bright);
+  font-weight: 500;
+}
+
 .hero-actions {
   display: flex;
   gap: 1.25rem;
@@ -197,8 +204,8 @@ nav.scrolled {
   font-family: var(--font-body);
   font-size: 13px;
   font-weight: 500;
-  color: var(--bg-deep);
-  background: var(--accent-gold);
+  color: var(--text-bright);
+  background: var(--accent-red);
   padding: 10px 24px;
   border-radius: 3px;
   letter-spacing: 0.02em;
@@ -206,7 +213,7 @@ nav.scrolled {
 }
 
 .btn-primary:hover {
-  background: #D4B48A;
+  background: var(--accent-red-bright);
   transform: translateY(-1px);
 }
 
@@ -214,15 +221,15 @@ nav.scrolled {
   display: inline-block;
   font-family: var(--font-body);
   font-size: 13px;
-  color: var(--accent-gold);
+  color: var(--accent-red-bright);
   padding: 10px 0;
-  border-bottom: 1px solid var(--accent-gold);
+  border-bottom: 1px solid var(--accent-red);
   transition: color 0.3s, border-color 0.3s;
 }
 
 .btn-ghost:hover {
-  color: #D4B48A;
-  border-color: #D4B48A;
+  color: #C45A5A;
+  border-color: #C45A5A;
 }
 
 .btn-ghost .arrow {
@@ -315,7 +322,7 @@ nav.scrolled {
   line-height: 1.75;
 }
 
-/* --- Project Grid (Selected Work) --- */
+/* --- Project Grid --- */
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -333,13 +340,13 @@ nav.scrolled {
 }
 
 .project-card:hover {
-  border-color: rgba(201, 168, 124, 0.25);
+  border-color: rgba(148, 58, 58, 0.3);
   transform: translateY(-2px);
   background: var(--bg-card);
 }
 
 .project-card:hover .project-link {
-  color: var(--accent-gold);
+  color: var(--accent-red-bright);
 }
 
 .project-link {
@@ -366,18 +373,18 @@ nav.scrolled {
 }
 
 .tag-gold {
-  color: var(--accent-gold);
-  background: var(--accent-gold-dim);
+  color: var(--accent-cream);
+  background: var(--accent-cream-dim);
 }
 
 .tag-blue {
-  color: var(--accent-blue);
-  background: var(--accent-blue-dim);
+  color: var(--accent-green-bright);
+  background: var(--accent-green-dim);
 }
 
 .tag-rose {
-  color: var(--accent-rose);
-  background: var(--accent-rose-dim);
+  color: var(--accent-red-bright);
+  background: var(--accent-red-dim);
 }
 
 .project-title {
@@ -469,7 +476,7 @@ nav.scrolled {
 
 .cta-card {
   background: var(--bg-mid);
-  border: 1px solid rgba(201, 168, 124, 0.2);
+  border: 1px solid rgba(148, 58, 58, 0.2);
   border-radius: var(--radius);
   padding: 2.5rem;
   max-width: 600px;
@@ -519,7 +526,7 @@ nav.scrolled {
   display: inline-block;
   font-family: var(--font-display);
   font-size: 18px;
-  color: var(--accent-gold);
+  color: var(--accent-red-bright);
   border-bottom: 1px solid transparent;
   transition: border-color 0.3s;
   padding-bottom: 2px;
@@ -527,7 +534,7 @@ nav.scrolled {
 }
 
 .contact-email:hover {
-  border-color: var(--accent-gold);
+  border-color: var(--accent-red-bright);
 }
 
 .contact-links {
@@ -542,7 +549,7 @@ nav.scrolled {
 }
 
 .contact-links a:hover {
-  color: var(--accent-gold);
+  color: var(--accent-red-bright);
 }
 
 /* --- Footer --- */
@@ -578,7 +585,7 @@ footer {
 }
 
 .footer-links a:hover {
-  color: var(--accent-gold);
+  color: var(--accent-red-bright);
 }
 
 /* --- Responsive --- */
@@ -687,15 +694,13 @@ footer {
 }
 
 .detail-section h2 {
-  font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 400;
-  color: var(--text-bright);
-  margin-bottom: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-size: 12px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
   color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
 }
 
 .detail-section p {
@@ -721,9 +726,9 @@ footer {
 .project-nav {
   display: flex;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 3rem;
   margin-top: 3rem;
   padding-top: 2rem;
   border-top: 1px solid rgba(255,255,255,0.06);
+  flex-wrap: wrap;
 }
-
