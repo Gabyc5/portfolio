@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enterprise AI Agent Integration | Gaby Hernandez</title>
+  <meta name="description" content="AI agent workflow connecting enterprise platforms via MCP server with OAuth 2.0 and Cloudflare Tunnel.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9650;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+  <nav id="nav" class="scrolled">
+    <a href="../index.html" class="nav-coords">&larr; Back</a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <section class="section project-detail">
+    <div class="project-detail-header reveal">
+      <div class="project-tags">
+        <span class="tag tag-gold">MCP</span>
+        <span class="tag tag-blue">AWS</span>
+        <span class="tag tag-rose">AI</span>
+        <span class="tag tag-gold">OAuth 2.0</span>
+      </div>
+      <h1>Enterprise AI agent integration</h1>
+      <span class="project-context">Enterprise Consulting, 2026</span>
+    </div>
+
+    <div class="project-detail-body">
+      <div class="detail-section reveal">
+        <h2>Problem</h2>
+        <p>
+          A major enterprise platform needed to connect to an AI agent system, but the legacy
+          platform only exposed SOAP/XML endpoints with no modern API layer. The client's
+          security requirements were strict: no inbound ports, full OAuth 2.0 compliance, and
+          everything had to run on their existing AWS infrastructure. Nobody had done this
+          integration before with MCP protocol.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Approach</h2>
+        <p>
+          I designed the integration around a custom MCP server using Streamable HTTP transport.
+          The server sits behind a Cloudflare Tunnel, so the enterprise network never opens an
+          inbound port. Auth goes through AWS Cognito with OAuth 2.0/OIDC and PKCE, which
+          handles both the AI platform's service-to-service calls and any user-facing flows.
+        </p>
+        <p>
+          The MCP server translates between the AI platform's tool-calling interface and the
+          legacy SOAP/XML endpoints. I wrote the translation layer, the auth scaffolding, and
+          the infrastructure-as-code for deployment. Also scoped the full AWS cost model
+          for production (Cognito, EC2/Fargate, CloudWatch, data transfer).
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Architecture</h2>
+        <div class="arch-diagram">
+          <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <!-- AI Platform -->
+            <rect x="20" y="120" width="130" height="60" rx="4" fill="#4D4745" stroke="#C9A87C" stroke-width="0.8"/>
+            <text x="85" y="147" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="12" font-weight="500">AI Platform</text>
+            <text x="85" y="165" text-anchor="middle" fill="#A89E96" font-family="Outfit,sans-serif" font-size="10">Tool calling</text>
+
+            <!-- Arrow 1 -->
+            <line x1="150" y1="150" x2="200" y2="150" stroke="#857B75" stroke-width="1"/>
+            <polygon points="198,146 206,150 198,154" fill="#857B75"/>
+            <text x="178" y="140" text-anchor="middle" fill="#857B75" font-family="Outfit,sans-serif" font-size="9">HTTPS</text>
+
+            <!-- MCP Server -->
+            <rect x="206" y="105" width="140" height="90" rx="4" fill="#4D4745" stroke="#7BA3B0" stroke-width="0.8"/>
+            <text x="276" y="135" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="12" font-weight="500">MCP Server</text>
+            <text x="276" y="153" text-anchor="middle" fill="#A89E96" font-family="Outfit,sans-serif" font-size="10">Streamable HTTP</text>
+            <text x="276" y="168" text-anchor="middle" fill="#A89E96" font-family="Outfit,sans-serif" font-size="10">SOAP/XML adapter</text>
+
+            <!-- Arrow 2 up to Cognito -->
+            <line x1="276" y1="105" x2="276" y2="55" stroke="#857B75" stroke-width="1"/>
+            <polygon points="272,57 276,49 280,57" fill="#857B75"/>
+
+            <!-- Cognito -->
+            <rect x="216" y="10" width="120" height="42" rx="4" fill="#4D4745" stroke="#C9A87C" stroke-width="0.8"/>
+            <text x="276" y="30" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="11" font-weight="500">AWS Cognito</text>
+            <text x="276" y="44" text-anchor="middle" fill="#A89E96" font-family="Outfit,sans-serif" font-size="9">OAuth 2.0 / PKCE</text>
+
+            <!-- Arrow 3 -->
+            <line x1="346" y1="150" x2="410" y2="150" stroke="#857B75" stroke-width="1"/>
+            <polygon points="408,146 416,150 408,154" fill="#857B75"/>
+
+            <!-- Cloudflare Tunnel -->
+            <rect x="416" y="115" width="140" height="70" rx="4" fill="#4D4745" stroke="#B07A7A" stroke-width="0.8"/>
+            <text x="486" y="143" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="12" font-weight="500">Cloudflare Tunnel</text>
+            <text x="486" y="161" text-anchor="middle" fill="#A89E96" font-family="Outfit,sans-serif" font-size="10">Zero inbound ports</text>
+
+            <!-- Arrow 4 -->
+            <line x1="556" y1="150" x2="620" y2="150" stroke="#857B75" stroke-width="1"/>
+            <polygon points="618,146 626,150 618,154" fill="#857B75"/>
+
+            <!-- Enterprise API -->
+            <rect x="626" y="115" width="150" height="70" rx="4" fill="#4D4745" stroke="#857B75" stroke-width="0.8"/>
+            <text x="701" y="143" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="12" font-weight="500">Enterprise API</text>
+            <text x="701" y="161" text-anchor="middle" fill="#A89E96" font-family="Outfit,sans-serif" font-size="10">SOAP/XML endpoints</text>
+
+            <!-- Labels -->
+            <text x="400" y="280" text-anchor="middle" fill="#857B75" font-family="Outfit,sans-serif" font-size="10">Enterprise network boundary</text>
+            <line x1="400" y1="260" x2="400" y2="240" stroke="#857B75" stroke-width="0.5" stroke-dasharray="4,4"/>
+            <line x1="390" y1="240" x2="800" y2="240" stroke="#857B75" stroke-width="0.5" stroke-dasharray="4,4"/>
+            <line x1="390" y1="240" x2="390" y2="100" stroke="#857B75" stroke-width="0.5" stroke-dasharray="4,4"/>
+            <line x1="390" y1="100" x2="800" y2="100" stroke="#857B75" stroke-width="0.5" stroke-dasharray="4,4"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Tech stack</h2>
+        <div class="cert-list">
+          <span class="cert">Python</span>
+          <span class="cert">MCP Protocol</span>
+          <span class="cert">AWS Cognito</span>
+          <span class="cert">Cloudflare Tunnel</span>
+          <span class="cert">OAuth 2.0 / OIDC</span>
+          <span class="cert">SOAP/XML</span>
+          <span class="cert">Terraform</span>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Status</h2>
+        <p>Currently in PoC validation. Infrastructure cost model approved. Pending production deployment decision.</p>
+      </div>
+    </div>
+
+    <div class="project-nav reveal">
+      <a href="../index.html#work" class="btn-ghost">&larr; All projects</a>
+      <a href="multi-region.html" class="btn-ghost">Next project &rarr;</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Gaby Hernandez</span>
+      <div class="footer-links">
+        <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:gcg.hdezg@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/main.js"></script>
+</body>
+</html>

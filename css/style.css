@@ -14,10 +14,10 @@
   --bg-mid: #443F3C;
   --bg-card: #4D4745;
   --bg-surface: #564F4D;
-  --text-bright: #F0EAE3;
-  --text-body: #C4BAB2;
-  --text-muted: #948A82;
-  --text-faint: #706762;
+  --text-bright: #F2ECE5;
+  --text-body: #D4CBC3;
+  --text-muted: #A89E96;
+  --text-faint: #857B75;
   --accent-gold: #C9A87C;
   --accent-gold-dim: rgba(201, 168, 124, 0.12);
   --accent-blue: #7BA3B0;
@@ -323,17 +323,31 @@ nav.scrolled {
 }
 
 .project-card {
+  display: block;
   background: var(--bg-mid);
   border: 0.5px solid rgba(255,255,255,0.06);
   border-radius: var(--radius);
   padding: 1.5rem;
   transition: border-color 0.3s, transform 0.3s, background 0.3s;
+  cursor: pointer;
 }
 
 .project-card:hover {
   border-color: rgba(201, 168, 124, 0.25);
   transform: translateY(-2px);
   background: var(--bg-card);
+}
+
+.project-card:hover .project-link {
+  color: var(--accent-gold);
+}
+
+.project-link {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--text-faint);
+  margin-top: 8px;
+  transition: color 0.3s;
 }
 
 .project-tags {
@@ -645,3 +659,71 @@ footer {
     gap: 1rem;
   }
 }
+
+/* --- Project Detail Pages --- */
+.project-detail {
+  padding-top: 7rem;
+}
+
+.project-detail-header {
+  margin-bottom: 3rem;
+}
+
+.project-detail-header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 300;
+  color: var(--text-bright);
+  line-height: 1.25;
+  margin: 1rem 0 0.75rem;
+}
+
+.project-detail-body {
+  max-width: 700px;
+}
+
+.detail-section {
+  margin-bottom: 2.5rem;
+}
+
+.detail-section h2 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-bright);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+.detail-section p {
+  font-size: 15px;
+  color: var(--text-body);
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.arch-diagram {
+  background: var(--bg-mid);
+  border: 0.5px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+}
+
+.arch-diagram svg {
+  min-width: 600px;
+}
+
+.project-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+

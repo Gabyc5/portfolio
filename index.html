@@ -5,16 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gaby Hernandez</title>
   <meta name="description" content="AI agent systems and cloud infrastructure for enterprise environments. NASA, AWS, Chevron.">
-
-  <!-- Open Graph -->
   <meta property="og:title" content="Gaby Hernandez">
   <meta property="og:description" content="AI agent systems and cloud infrastructure for enterprise environments.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://gabyhernandez.dev">
-
-  <!-- Favicon -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9650;</text></svg>">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
@@ -22,9 +17,8 @@
 </head>
 <body>
 
-  <!-- Navigation -->
   <nav id="nav">
-    <span class="nav-coords">29.7858 N, 95.8245 W</span>
+    <span class="nav-coords">29.7789 N, 95.8475 W</span>
     <div class="nav-links">
       <a href="#work">Work</a>
       <a href="#about">About</a>
@@ -33,16 +27,15 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
   <section class="hero" id="top">
     <canvas id="terrain-canvas"></canvas>
     <div class="hero-content">
       <h1 class="reveal">I build systems at the edges where things don't usually connect.</h1>
       <p class="hero-sub reveal" data-delay="1">
-        I'm Gaby. I build AI agent systems and cloud infrastructure that connect
-        enterprise platforms to internal tools using MCP protocol, AWS, and custom
-        API integrations. Before this, I built mission-critical systems at NASA,
-        cloud infrastructure at AWS, and sensor data pipelines at Chevron.
+        I'm Gaby. I build AI agent systems and cloud infrastructure that wire enterprise
+        platforms to internal tools. MCP protocol, AWS, custom API integrations. Before this
+        I built mission-critical systems at NASA, cloud infrastructure at AWS, and
+        sensor data pipelines at Chevron.
       </p>
       <div class="hero-actions reveal" data-delay="2">
         <a href="#work" class="btn-primary">See my work</a>
@@ -65,16 +58,14 @@
     </div>
   </section>
 
-  <!-- Work Section -->
   <section class="section work-section" id="work">
 
-    <!-- Featured Work -->
     <div class="section-header reveal">
       <span class="section-label">Featured work</span>
     </div>
 
     <div class="featured-grid">
-      <article class="project-card featured-card reveal" id="project-ai-agent">
+      <a href="projects/ai-agent.html" class="project-card featured-card reveal" id="project-ai-agent">
         <div class="project-tags">
           <span class="tag tag-gold">MCP</span>
           <span class="tag tag-blue">AWS</span>
@@ -83,16 +74,16 @@
         </div>
         <h3 class="project-title">Enterprise AI agent integration</h3>
         <p class="project-desc">
-          Designed and built an AI agent workflow connecting an enterprise platform to internal
-          tools via a custom MCP server. Implemented OAuth 2.0/OIDC authentication with PKCE
-          via AWS Cognito, zero-inbound-port security through Cloudflare Tunnel, and Streamable
-          HTTP transport. Scoped cloud infrastructure, cost modeling, and architecture for
-          production deployment.
+          Built an AI agent workflow that connects an enterprise platform to internal tools
+          through a custom MCP server. OAuth 2.0/OIDC with PKCE via AWS Cognito,
+          zero-inbound-port security through Cloudflare Tunnel, Streamable HTTP transport.
+          Full cloud infrastructure scoping and cost modeling for production.
         </p>
         <span class="project-context">Enterprise Consulting, 2026</span>
-      </article>
+        <span class="project-link">View details &rarr;</span>
+      </a>
 
-      <article class="project-card featured-card reveal" id="project-multi-region">
+      <a href="projects/multi-region.html" class="project-card featured-card reveal" id="project-multi-region">
         <div class="project-tags">
           <span class="tag tag-blue">ECS</span>
           <span class="tag tag-blue">Route 53</span>
@@ -101,37 +92,36 @@
         </div>
         <h3 class="project-title">Multi-region failover infrastructure</h3>
         <p class="project-desc">
-          Containerized application deployed across two AWS regions with Auto Scaling Groups,
-          ALBs, and automated health checks achieving ~99.99% availability through Route 53
-          failover routing. Built a serverless ETL pipeline processing financial documents
-          from S3 into DynamoDB. Configured CloudWatch monitoring and WAF security rules
-          achieving 100% block rate against simulated attack patterns.
+          Containerized app across two AWS regions with Auto Scaling, ALBs, and Route 53
+          health-check failover. ~99.99% availability. Also built a serverless ETL pipeline
+          (S3 to Lambda to DynamoDB) and WAF rules that hit 100% block rate on simulated attacks.
         </p>
         <span class="project-context">Amazon Web Services, 2025</span>
-      </article>
+        <span class="project-link">View details &rarr;</span>
+      </a>
     </div>
 
-    <!-- Selected Work -->
     <div class="section-header section-header-secondary reveal">
       <span class="section-label">Selected work</span>
     </div>
 
     <div class="project-grid">
-      <article class="project-card reveal" id="project-eva">
+      <a href="projects/eva-tool.html" class="project-card reveal" id="project-eva">
         <div class="project-tags">
           <span class="tag tag-gold">Python</span>
           <span class="tag tag-rose">MariaDB</span>
         </div>
         <h3 class="project-title">EVA geolocation analysis tool</h3>
         <p class="project-desc">
-          Automated spacewalk scheduling by parsing astronaut coordinate data and running
-          proximity analysis to identify concurrent EVA opportunities. Migrated 500+ legacy
-          MediaWiki queries to an optimized Cargo database.
+          Automated spacewalk scheduling. Parses astronaut coordinate data, runs proximity
+          analysis, figures out which EVAs can happen at the same time. Also migrated 500+
+          legacy MediaWiki queries to Cargo.
         </p>
-        <span class="project-context">NASA Johnson Space Center, 2025</span>
-      </article>
+        <span class="project-context">NASA JSC, 2025</span>
+        <span class="project-link">View details &rarr;</span>
+      </a>
 
-      <article class="project-card reveal" id="project-sensor">
+      <a href="projects/sensor-pipeline.html" class="project-card reveal" id="project-sensor">
         <div class="project-tags">
           <span class="tag tag-blue">IoT</span>
           <span class="tag tag-gold">Pandas</span>
@@ -139,26 +129,26 @@
         </div>
         <h3 class="project-title">Oil field sensor data pipeline</h3>
         <p class="project-desc">
-          End-to-end ETL processing 32,000+ data points per sensor from 10,000+ stations.
-          Built C++ algorithms for 3-axis accelerometer orientation calculations
-          and a JavaScript visualization dashboard for predictive maintenance.
+          End-to-end ETL. 32,000+ data points per sensor, 10,000+ stations. C++ algorithms
+          for accelerometer orientation, JavaScript dashboard for predictive maintenance.
         </p>
         <span class="project-context">Chevron, 2024</span>
-      </article>
+        <span class="project-link">View details &rarr;</span>
+      </a>
 
-      <article class="project-card reveal" id="project-security">
+      <a href="projects/mission-security.html" class="project-card reveal" id="project-security">
         <div class="project-tags">
           <span class="tag tag-gold">ServiceNow</span>
           <span class="tag tag-blue">Security</span>
         </div>
         <h3 class="project-title">Mission control security systems</h3>
         <p class="project-desc">
-          Managed firewall change requests and infrastructure security reviews for NASA's
-          Mission Control Center systems. Eliminated an entire CDR design phase by demonstrating
-          existing security controls already met requirements.
+          Firewall change requests and security reviews for NASA's Mission Control Center.
+          Killed an entire CDR design phase by proving existing controls already covered it.
         </p>
-        <span class="project-context">NASA Johnson Space Center, 2025</span>
-      </article>
+        <span class="project-context">NASA JSC, 2025</span>
+        <span class="project-link">View details &rarr;</span>
+      </a>
     </div>
 
     <div class="work-cta reveal">
@@ -168,7 +158,6 @@
     </div>
   </section>
 
-  <!-- About Section -->
   <section class="section about-section" id="about">
     <div class="section-header reveal">
       <span class="section-label">The full picture</span>
@@ -182,23 +171,21 @@
       <div class="about-body reveal">
         <p>
           Drive-through cashier. Catering crew. Phone sales. Tutoring algebra at a community center.
-          My family taught me to start working early and figure things out along the way.
-          It gave me something useful: I know how to talk to people who think nothing like me,
-          and I know how to learn fast when there's no other option.
+          My family taught me to start working early and figure it out as you go.
+          That gave me something I use constantly: I can talk to people who think
+          nothing like me, and I can learn fast when there's no other option.
         </p>
         <p>
-          I studied computer science and mathematics at the University of Houston, graduated with
-          a 3.97, and spent three semesters at NASA's Johnson Space Center before I turned 22.
-          I interned at Chevron twice, building IoT data pipelines and cloud infrastructure
-          for oil field operations. I spent a summer at AWS in Seattle, architecting multi-region
-          systems and learning how large-scale clients think about resilience.
+          Studied CS and math at the University of Houston, graduated with a 3.97. Three semesters
+          at NASA Johnson Space Center before I turned 22. Two summers at Chevron building IoT
+          pipelines and cloud infra for oil field operations. A summer at AWS in Seattle
+          doing multi-region architecture and learning how enterprise clients think about uptime.
         </p>
         <p>
           Now I build AI agent integrations and cloud infrastructure for enterprise clients.
-          Most of my time goes toward connecting platforms that were never designed to work together,
-          scoping AWS costs, and writing the glue code (MCP servers, API adapters, auth flows)
-          that makes it all run. I care about work that requires both engineering depth
-          and the ability to communicate across teams.
+          Most of that is connecting platforms that were never designed to work together,
+          scoping AWS costs, and writing the glue code
+          (MCP servers, API adapters, auth flows) that makes it all run.
         </p>
       </div>
 
@@ -227,7 +214,6 @@
     </div>
   </section>
 
-  <!-- Freelance CTA -->
   <section class="section cta-section" id="services">
     <div class="cta-card reveal">
       <h3>Available for select projects</h3>
@@ -240,12 +226,11 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
   <section class="section contact-section" id="contact">
     <div class="contact-inner reveal">
       <h2>Say hello.</h2>
-      <p>I'm open to conversations about cloud infrastructure,
-        AI agent development, or interesting problems in general.</p>
+      <p>Open to conversations about cloud infrastructure, AI agent development,
+        or interesting problems in general.</p>
       <a href="mailto:gcg.hdezg@gmail.com" class="contact-email">gcg.hdezg@gmail.com</a>
       <div class="contact-links">
         <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
@@ -254,7 +239,6 @@
     </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <div class="footer-inner">
       <span class="footer-name">Gaby Hernandez</span>

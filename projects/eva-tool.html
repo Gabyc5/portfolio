@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EVA Geolocation Analysis Tool | Gaby Hernandez</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9650;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav id="nav" class="scrolled">
+    <a href="../index.html" class="nav-coords">&larr; Back</a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <section class="section project-detail">
+    <div class="project-detail-header reveal">
+      <div class="project-tags">
+        <span class="tag tag-gold">Python</span>
+        <span class="tag tag-rose">MariaDB</span>
+        <span class="tag tag-blue">Tkinter</span>
+      </div>
+      <h1>EVA geolocation analysis tool</h1>
+      <span class="project-context">NASA Johnson Space Center, 2025</span>
+    </div>
+
+    <div class="project-detail-body">
+      <div class="detail-section reveal">
+        <h2>Problem</h2>
+        <p>
+          Flight controllers needed to figure out which spacewalks (EVAs) could happen at the
+          same time based on where astronauts would physically be on the ISS exterior. They were
+          doing this manually. Separately, the EVA branch was running 500+ queries on a legacy
+          MediaWiki system that was slow and fragile.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Approach</h2>
+        <p>
+          Built a Python tool with a Tkinter GUI that parses YAML files of astronaut coordinate
+          data, speed metrics, and time constraints. It runs proximity analysis and distance
+          calculations, then spits out Excel reports showing which EVAs can run concurrently.
+          Flight controllers just load the file and get the answer.
+        </p>
+        <p>
+          For the database migration: rewrote 500+ semantic MediaWiki queries into optimized
+          Cargo database queries (MariaDB underneath). Added proper indexing. The queries now
+          power mission-critical workflows like personnel scheduling and tool failure tracking.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Tech stack</h2>
+        <div class="cert-list">
+          <span class="cert">Python</span>
+          <span class="cert">Tkinter</span>
+          <span class="cert">YAML parsing</span>
+          <span class="cert">MariaDB</span>
+          <span class="cert">Cargo DB</span>
+          <span class="cert">MediaWiki</span>
+          <span class="cert">Excel automation</span>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Status</h2>
+        <p>Deployed and in use by EVA flight controllers. Database migration complete.</p>
+      </div>
+    </div>
+
+    <div class="project-nav reveal">
+      <a href="multi-region.html" class="btn-ghost">&larr; Previous project</a>
+      <a href="sensor-pipeline.html" class="btn-ghost">Next project &rarr;</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Gaby Hernandez</span>
+      <div class="footer-links">
+        <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:gcg.hdezg@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+  <script src="../js/main.js"></script>
+</body>
+</html>

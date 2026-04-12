@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Multi-Region Failover Infrastructure | Gaby Hernandez</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9650;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav id="nav" class="scrolled">
+    <a href="../index.html" class="nav-coords">&larr; Back</a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <section class="section project-detail">
+    <div class="project-detail-header reveal">
+      <div class="project-tags">
+        <span class="tag tag-blue">ECS</span>
+        <span class="tag tag-blue">Route 53</span>
+        <span class="tag tag-gold">Lambda</span>
+        <span class="tag tag-rose">WAF</span>
+      </div>
+      <h1>Multi-region failover infrastructure</h1>
+      <span class="project-context">Amazon Web Services, 2025</span>
+    </div>
+
+    <div class="project-detail-body">
+      <div class="detail-section reveal">
+        <h2>Problem</h2>
+        <p>
+          Enterprise applications need to stay up even when an entire AWS region goes down.
+          The goal was to design and deploy a containerized application that could survive
+          a full regional outage with minimal downtime, and prove it with real failover testing.
+          Also needed a data pipeline that could process uploaded financial documents automatically.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Approach</h2>
+        <p>
+          Deployed the same ECS service in two AWS regions (us-east-1 and us-west-2), each
+          behind its own ALB with Auto Scaling Groups. Route 53 health checks ping both
+          regions every 10 seconds. If the primary region fails the health check, traffic
+          automatically routes to the secondary within about 60 seconds.
+        </p>
+        <p>
+          Built a separate serverless ETL pipeline: financial documents land in S3, trigger
+          a Lambda function that extracts transaction data (price, vendor, totals), transforms
+          it through business logic, and loads the results into DynamoDB. CloudWatch dashboards
+          track everything. WAF sits in front with rate-limiting and signature-based rules.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Architecture</h2>
+        <div class="arch-diagram">
+          <svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <!-- Route 53 -->
+            <rect x="310" y="10" width="160" height="50" rx="4" fill="#4D4745" stroke="#C9A87C" stroke-width="0.8"/>
+            <text x="390" y="33" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="12" font-weight="500">Route 53</text>
+            <text x="390" y="48" text-anchor="middle" fill="#A89E96" font-family="Outfit,sans-serif" font-size="10">Health check failover</text>
+
+            <!-- Arrow to Region 1 -->
+            <line x1="350" y1="60" x2="180" y2="110" stroke="#857B75" stroke-width="1"/>
+            <polygon points="182,106 176,114 186,112" fill="#857B75"/>
+
+            <!-- Arrow to Region 2 -->
+            <line x1="430" y1="60" x2="600" y2="110" stroke="#857B75" stroke-width="1"/>
+            <polygon points="596,106 604,112 598,114" fill="#857B75"/>
+
+            <!-- Region 1 box -->
+            <rect x="30" y="100" width="310" height="170" rx="6" fill="none" stroke="#7BA3B0" stroke-width="0.5" stroke-dasharray="6,4"/>
+            <text x="50" y="120" fill="#7BA3B0" font-family="Outfit,sans-serif" font-size="10">us-east-1 (primary)</text>
+
+            <!-- WAF -->
+            <rect x="50" y="135" width="80" height="35" rx="3" fill="#4D4745" stroke="#B07A7A" stroke-width="0.6"/>
+            <text x="90" y="157" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">WAF</text>
+
+            <!-- ALB -->
+            <rect x="150" y="135" width="80" height="35" rx="3" fill="#4D4745" stroke="#857B75" stroke-width="0.6"/>
+            <text x="190" y="157" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">ALB</text>
+
+            <!-- ECS -->
+            <rect x="250" y="135" width="80" height="35" rx="3" fill="#4D4745" stroke="#C9A87C" stroke-width="0.6"/>
+            <text x="290" y="157" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">ECS + ASG</text>
+
+            <!-- CloudWatch -->
+            <rect x="150" y="200" width="100" height="35" rx="3" fill="#4D4745" stroke="#857B75" stroke-width="0.6"/>
+            <text x="200" y="222" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">CloudWatch</text>
+
+            <!-- SNS -->
+            <rect x="260" y="200" width="60" height="35" rx="3" fill="#4D4745" stroke="#857B75" stroke-width="0.6"/>
+            <text x="290" y="222" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">SNS</text>
+
+            <!-- Arrows inside region 1 -->
+            <line x1="130" y1="152" x2="148" y2="152" stroke="#857B75" stroke-width="0.8"/>
+            <line x1="230" y1="152" x2="248" y2="152" stroke="#857B75" stroke-width="0.8"/>
+
+            <!-- Region 2 box -->
+            <rect x="440" y="100" width="310" height="170" rx="6" fill="none" stroke="#7BA3B0" stroke-width="0.5" stroke-dasharray="6,4"/>
+            <text x="460" y="120" fill="#7BA3B0" font-family="Outfit,sans-serif" font-size="10">us-west-2 (secondary)</text>
+
+            <!-- WAF 2 -->
+            <rect x="460" y="135" width="80" height="35" rx="3" fill="#4D4745" stroke="#B07A7A" stroke-width="0.6"/>
+            <text x="500" y="157" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">WAF</text>
+
+            <!-- ALB 2 -->
+            <rect x="560" y="135" width="80" height="35" rx="3" fill="#4D4745" stroke="#857B75" stroke-width="0.6"/>
+            <text x="600" y="157" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">ALB</text>
+
+            <!-- ECS 2 -->
+            <rect x="660" y="135" width="80" height="35" rx="3" fill="#4D4745" stroke="#C9A87C" stroke-width="0.6"/>
+            <text x="700" y="157" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">ECS + ASG</text>
+
+            <!-- Arrows inside region 2 -->
+            <line x1="540" y1="152" x2="558" y2="152" stroke="#857B75" stroke-width="0.8"/>
+            <line x1="640" y1="152" x2="658" y2="152" stroke="#857B75" stroke-width="0.8"/>
+
+            <!-- ETL Pipeline -->
+            <text x="400" y="310" text-anchor="middle" fill="#857B75" font-family="Outfit,sans-serif" font-size="10">Serverless ETL pipeline</text>
+            <rect x="120" y="320" width="80" height="35" rx="3" fill="#4D4745" stroke="#C9A87C" stroke-width="0.6"/>
+            <text x="160" y="342" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">S3 Upload</text>
+            <line x1="200" y1="337" x2="280" y2="337" stroke="#857B75" stroke-width="0.8"/>
+            <polygon points="278,333 286,337 278,341" fill="#857B75"/>
+            <rect x="286" y="320" width="80" height="35" rx="3" fill="#4D4745" stroke="#C9A87C" stroke-width="0.6"/>
+            <text x="326" y="342" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">Lambda</text>
+            <line x1="366" y1="337" x2="446" y2="337" stroke="#857B75" stroke-width="0.8"/>
+            <polygon points="444,333 452,337 444,341" fill="#857B75"/>
+            <rect x="452" y="320" width="100" height="35" rx="3" fill="#4D4745" stroke="#C9A87C" stroke-width="0.6"/>
+            <text x="502" y="342" text-anchor="middle" fill="#F2ECE5" font-family="Outfit,sans-serif" font-size="10">DynamoDB</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Tech stack</h2>
+        <div class="cert-list">
+          <span class="cert">AWS ECS</span>
+          <span class="cert">Docker</span>
+          <span class="cert">Route 53</span>
+          <span class="cert">ALB</span>
+          <span class="cert">Lambda (Python)</span>
+          <span class="cert">DynamoDB</span>
+          <span class="cert">CloudWatch</span>
+          <span class="cert">SNS</span>
+          <span class="cert">WAF</span>
+          <span class="cert">S3</span>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Status</h2>
+        <p>Deployed and validated. Failover tested with simulated regional outage. ~99.99% measured availability.</p>
+      </div>
+    </div>
+
+    <div class="project-nav reveal">
+      <a href="ai-agent.html" class="btn-ghost">&larr; Previous project</a>
+      <a href="eva-tool.html" class="btn-ghost">Next project &rarr;</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Gaby Hernandez</span>
+      <div class="footer-links">
+        <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:gcg.hdezg@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+  <script src="../js/main.js"></script>
+</body>
+</html>
