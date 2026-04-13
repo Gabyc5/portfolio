@@ -47,16 +47,29 @@
       <div class="detail-section reveal">
         <h2>Approach</h2>
         <p>
-          Deployed the same ECS service in two AWS regions (us-east-1 and us-west-2), each
-          behind its own ALB with Auto Scaling Groups. Route 53 health checks ping both
-          regions every 10 seconds. If the primary region fails the health check, traffic
-          automatically routes to the secondary within about 60 seconds.
+          Deployed the same ECS service in two AWS regions (us-west-1 as primary, us-east-2
+          as failover), each behind its own ALB with Auto Scaling Groups. Deliberately chose
+          EC2 launch type over Fargate to demonstrate deeper control over infrastructure,
+          instance-level scaling, and integration with ASGs. Created launch templates and
+          ASGs tightly coupled with ECS capacity providers so container workloads scaled
+          in tandem with underlying compute.
         </p>
         <p>
-          Built a separate serverless ETL pipeline: financial documents land in S3, trigger
-          a Lambda function that extracts transaction data (price, vendor, totals), transforms
-          it through business logic, and loads the results into DynamoDB. CloudWatch dashboards
-          track everything. WAF sits in front with rate-limiting and signature-based rules.
+          Scaling policies were built around ALB request count metrics rather than CPU-based
+          triggers. The application was lightweight enough that CPU would never realistically
+          spike, so request count was the honest metric for traffic-driven scaling. Route 53
+          health checks pinged both regions continuously; failover happened within about 60
+          seconds of primary going down. A key engineering challenge was that the lightweight
+          frontend didn't naturally generate enough load, so demonstrations were designed
+          to artificially generate traffic and simulate failure conditions.
+        </p>
+        <p>
+          WAF configuration included AWS Managed Rules, rate-based rules to block excessive
+          requests from single IPs, and XSS protections. CloudWatch dashboards visualize
+          system health, traffic patterns, and scaling behavior across both regions. SNS
+          alerts fire on scaling activities and health check failures. Separately, built a
+          serverless ETL pipeline: financial documents land in S3, trigger a Lambda function
+          that extracts transaction data, transforms it, and loads results into DynamoDB.
         </p>
       </div>
 
@@ -79,7 +92,7 @@
 
             <!-- Region 1 box -->
             <rect x="30" y="100" width="310" height="170" rx="6" fill="none" stroke="#4A7C5C" stroke-width="0.5" stroke-dasharray="6,4"/>
-            <text x="50" y="120" fill="#4A7C5C" font-family="Outfit,sans-serif" font-size="10">us-east-1 (primary)</text>
+            <text x="50" y="120" fill="#4A7C5C" font-family="Outfit,sans-serif" font-size="10">us-west-1 (primary)</text>
 
             <!-- WAF -->
             <rect x="50" y="135" width="80" height="35" rx="3" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>
@@ -107,7 +120,7 @@
 
             <!-- Region 2 box -->
             <rect x="440" y="100" width="310" height="170" rx="6" fill="none" stroke="#4A7C5C" stroke-width="0.5" stroke-dasharray="6,4"/>
-            <text x="460" y="120" fill="#4A7C5C" font-family="Outfit,sans-serif" font-size="10">us-west-2 (secondary)</text>
+            <text x="460" y="120" fill="#4A7C5C" font-family="Outfit,sans-serif" font-size="10">us-east-2 (failover)</text>
 
             <!-- WAF 2 -->
             <rect x="460" y="135" width="80" height="35" rx="3" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bug Report Automation Tool | Gaby Hernandez</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9650;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav id="nav" class="scrolled">
+    <a href="../index.html" class="nav-coords">&larr; Back</a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <section class="section project-detail">
+    <div class="project-detail-header reveal">
+      <div class="project-tags">
+        <span class="tag tag-gold">Python</span>
+        <span class="tag tag-blue">Streamlit</span>
+        <span class="tag tag-rose">AI/LLM</span>
+        <span class="tag tag-gold">python-docx</span>
+      </div>
+      <h1>Bug report automation tool</h1>
+      <span class="project-context">Enterprise Consulting, 2026</span>
+    </div>
+
+    <div class="project-detail-body">
+      <div class="detail-section reveal">
+        <h2>Problem</h2>
+        <p>
+          QA testers write raw, unstructured notes during testing sessions. Reformatting
+          those into standardized bug reports with proper structure, severity ordering,
+          and both email and document outputs takes real time and introduces inconsistency.
+          The team needed a tool any member could use, regardless of technical background.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Approach</h2>
+        <p>
+          Built a two-interface tool: a Jupyter Notebook for the developer/maintainer and a
+          Streamlit web app for non-technical teammates. The tool accepts raw text or Word
+          documents as input, extracts text and images from .docx files using python-docx,
+          then sends the text to an LLM API with a detailed system prompt that structures
+          bugs into standardized JSON objects.
+        </p>
+        <p>
+          Post-processing sanitizes formatting artifacts, deduplicates requirement numbers,
+          and orders bugs by severity. Outputs are a plain text email and a formatted Word
+          document with embedded screenshots.
+        </p>
+        <p>
+          Security was a priority: API keys are encrypted at rest using Fernet symmetric
+          encryption (PBKDF2 with SHA256, 480K iterations). The plaintext key only exists
+          in memory during the session. Images never leave the local machine. Only raw text
+          goes to the AI endpoint.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Architecture</h2>
+        <div class="arch-diagram">
+          <svg viewBox="0 0 700 340" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <!-- User Input -->
+            <rect x="250" y="10" width="200" height="45" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.8"/>
+            <text x="350" y="30" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">User input</text>
+            <text x="350" y="45" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">Raw notes or .docx file</text>
+
+            <!-- Arrow -->
+            <line x1="350" y1="55" x2="350" y2="80" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="346,78 350,86 354,78" fill="#7A736C"/>
+
+            <!-- Input Handler -->
+            <rect x="230" y="88" width="240" height="45" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.8"/>
+            <text x="350" y="108" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">Input handler</text>
+            <text x="350" y="123" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">Extract text + images from .docx</text>
+
+            <!-- Arrow -->
+            <line x1="350" y1="133" x2="350" y2="158" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="346,156 350,164 354,156" fill="#7A736C"/>
+
+            <!-- AI Parser -->
+            <rect x="230" y="166" width="240" height="45" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.8"/>
+            <text x="350" y="186" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">AI parser</text>
+            <text x="350" y="201" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">LLM API returns structured JSON</text>
+
+            <!-- Fernet label -->
+            <rect x="510" y="170" width="160" height="38" rx="4" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="4,3"/>
+            <text x="590" y="188" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">Fernet encrypted API key</text>
+            <text x="590" y="200" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">PBKDF2 / SHA256 / 480K iter</text>
+            <line x1="470" y1="189" x2="508" y2="189" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="3,3"/>
+
+            <!-- Arrow -->
+            <line x1="350" y1="211" x2="350" y2="236" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="346,234 350,242 354,234" fill="#7A736C"/>
+
+            <!-- Post-Processor -->
+            <rect x="220" y="244" width="260" height="40" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.8"/>
+            <text x="350" y="262" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">Post-processor</text>
+            <text x="350" y="276" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">Sanitize, deduplicate, order by severity</text>
+
+            <!-- Arrows to outputs -->
+            <line x1="300" y1="284" x2="200" y2="310" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="202,306 196,314 206,312" fill="#7A736C"/>
+            <line x1="400" y1="284" x2="500" y2="310" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="496,306 504,312 498,314" fill="#7A736C"/>
+
+            <!-- Email output -->
+            <rect x="100" y="312" width="180" height="25" rx="4" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.6"/>
+            <text x="190" y="329" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11">Email generator (plain text)</text>
+
+            <!-- DOCX output -->
+            <rect x="420" y="312" width="180" height="25" rx="4" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.6"/>
+            <text x="510" y="329" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11">DOCX generator (python-docx)</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Tech stack</h2>
+        <div class="cert-list">
+          <span class="cert">Python</span>
+          <span class="cert">Streamlit</span>
+          <span class="cert">python-docx</span>
+          <span class="cert">LLM API</span>
+          <span class="cert">Fernet encryption</span>
+          <span class="cert">PBKDF2</span>
+          <span class="cert">Jupyter Notebook</span>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Status</h2>
+        <p>Deployed internally. Used by QA team for daily bug reporting across multiple test sprints.</p>
+      </div>
+    </div>
+
+    <div class="project-nav reveal">
+      <a href="mission-security.html" class="btn-ghost">&larr; Previous project</a>
+      <a href="../index.html#work" class="btn-ghost">All projects &rarr;</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Gaby Hernandez</span>
+      <div class="footer-links">
+        <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:gcg.hdezg@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+  <script src="../js/main.js"></script>
+</body>
+</html>
