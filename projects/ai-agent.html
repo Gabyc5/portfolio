@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Enterprise AI Agent Integration | Gaby Hernandez</title>
-  <meta name="description" content="AI agent workflow connecting enterprise platforms via MCP server with OAuth 2.0 and Cloudflare Tunnel.">
+  <meta name="description" content="AI agent workflow connecting enterprise platforms via MCP server with OAuth 2.0, zero-trust security, and multi-tier AWS infrastructure.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9650;</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -30,6 +30,7 @@
         <span class="tag tag-blue">AWS</span>
         <span class="tag tag-rose">AI</span>
         <span class="tag tag-gold">OAuth 2.0</span>
+        <span class="tag tag-blue">Zero-Trust</span>
       </div>
       <h1>Enterprise AI agent integration</h1>
       <span class="project-context">Enterprise Consulting, 2026</span>
@@ -39,83 +40,224 @@
       <div class="detail-section reveal">
         <h2>Problem</h2>
         <p>
-          A major enterprise platform needed to connect to an AI agent system, but the legacy
-          platform only exposed SOAP/XML endpoints with no modern API layer. The client's
-          security requirements were strict: no inbound ports, full OAuth 2.0 compliance, and
-          everything had to run on their existing AWS infrastructure. Nobody had done this
-          integration before with MCP protocol.
+          An energy trading client needed to verify whether vendor invoices matched the
+          settlement data in their legacy enterprise platform (30+ years old). This reconciliation
+          was entirely manual. The goal was to build an AI agent that could autonomously query
+          the platform's SOAP/XML API, pull settlement records, and compare them against invoice data.
+        </p>
+        <p>
+          No infrastructure existed. No playbook existed. MCP (Model Context Protocol) had only
+          been released months earlier. Connecting it to a decades-old enterprise system through
+          enterprise security guardrails had no reference architecture, no tutorial, no precedent.
+          Every decision was researched and built from scratch.
         </p>
       </div>
 
       <div class="detail-section reveal">
         <h2>Approach</h2>
         <p>
-          I designed the integration around a custom MCP server using Streamable HTTP transport.
-          The server sits behind a Cloudflare Tunnel, so the enterprise network never opens an
-          inbound port. Auth goes through AWS Cognito with OAuth 2.0/OIDC and PKCE, which
-          handles both the AI platform's service-to-service calls and any user-facing flows.
+          I designed, built, secured, and deployed the complete cloud infrastructure for this
+          system. The architecture went through three major redesigns as real-world constraints
+          surfaced. V1 used direct internet exposure with TLS and an Elastic IP. Corporate
+          security automation immediately reverted it. V2 used a Cloudflare Tunnel for outbound-only
+          connectivity. V3 (final) uses a Cloudflare reverse proxy at the edge with TLS termination
+          at origin, inbound port 443 restricted to exactly two proxy IPs.
         </p>
         <p>
-          The MCP server translates between the AI platform's tool-calling interface and the
-          legacy SOAP/XML endpoints. I wrote the translation layer, the auth scaffolding, and
-          the infrastructure-as-code for deployment. Also scoped the full AWS cost model
-          for production (Cognito, EC2/Fargate, CloudWatch, data transfer).
+          The application server runs on a Windows Server EC2 instance with a four-drive EBS storage
+          layout (1.85 TB across 4 gp3 volumes) mirroring the client's production configuration:
+          separate drives for OS/application, SQL Server installation, transaction logs, and data
+          files. I provisioned the instance, configured drives, transferred and restored a 187 GB
+          database backup, installed the required runtimes, and coordinated the application deployment
+          with the senior infrastructure lead.
+        </p>
+        <p>
+          The MCP server runs on a separate Linux EC2 in the same VPC. It uses Streamable HTTP
+          transport (not SSE or STDIO, which were the original assumptions and had to be corrected
+          during integration). I deployed a TLS-terminating reverse proxy in front of it, built
+          JWT validation middleware for OAuth 2.0 token verification against Cognito's JWKS endpoint,
+          and created structured JSON logging that passed enterprise security review.
+        </p>
+        <p>
+          All access to both instances uses AWS Systems Manager (Fleet Manager for the Windows box,
+          Session Manager for Linux). Zero SSH, zero RDP, zero inbound ports for management.
+          I set up the OAuth 2.0 authorization flow with PKCE through AWS Cognito, created the
+          OIDC integration package for the AI platform team, and handled the full security review
+          process including a 251-page vulnerability scan with 176 findings.
         </p>
       </div>
 
       <div class="detail-section reveal">
-        <h2>Architecture</h2>
+        <h2>Infrastructure architecture</h2>
         <div class="arch-diagram">
-          <svg viewBox="0 0 800 320" xmlns="http://www.w3.org/2000/svg" width="100%">
+          <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <!-- VPC Container -->
+            <rect x="120" y="90" width="560" height="410" rx="8" fill="none" stroke="#4A7C5C" stroke-width="0.8" stroke-dasharray="6,4"/>
+            <text x="140" y="110" fill="#4A7C5C" font-family="Outfit,sans-serif" font-size="10" font-weight="500">AWS VPC (single account)</text>
+
+            <!-- MCP EC2 box -->
+            <rect x="150" y="140" width="230" height="340" rx="6" fill="#222225" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="265" y="162" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">MCP server EC2 (Linux)</text>
+
+            <!-- MCP components -->
+            <rect x="170" y="180" width="190" height="30" rx="3" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.5"/>
+            <text x="265" y="199" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">Reverse proxy (TLS :443)</text>
+
+            <rect x="170" y="220" width="190" height="30" rx="3" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.5"/>
+            <text x="265" y="239" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">MCP server (Streamable HTTP :3000)</text>
+
+            <rect x="170" y="260" width="190" height="30" rx="3" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.5"/>
+            <text x="265" y="279" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">JWT validation (auth module)</text>
+
+            <rect x="170" y="300" width="190" height="30" rx="3" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.5"/>
+            <text x="265" y="319" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">Structured JSON logging</text>
+
+            <rect x="170" y="340" width="190" height="30" rx="3" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="3,3"/>
+            <text x="265" y="359" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="10">.env (credentials, gitignored)</text>
+
+            <rect x="170" y="380" width="190" height="30" rx="3" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="3,3"/>
+            <text x="265" y="399" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="10">systemd service (auto-restart)</text>
+
+            <!-- App server EC2 box -->
+            <rect x="420" y="140" width="240" height="340" rx="6" fill="#222225" stroke="#943A3A" stroke-width="0.6"/>
+            <text x="540" y="162" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">Application server EC2 (Windows)</text>
+
+            <!-- App server components -->
+            <rect x="440" y="180" width="200" height="30" rx="3" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.5"/>
+            <text x="540" y="199" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">IIS + enterprise application</text>
+
+            <rect x="440" y="220" width="200" height="30" rx="3" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.5"/>
+            <text x="540" y="239" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">SOAP/XML web services</text>
+
+            <rect x="440" y="260" width="200" height="30" rx="3" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.5"/>
+            <text x="540" y="279" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">SQL Server (database engine)</text>
+
+            <!-- EBS drives -->
+            <text x="460" y="315" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">EBS storage (1.85 TB, 4 gp3 volumes):</text>
+            <text x="460" y="332" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">C: 250 GB  OS + app binaries</text>
+            <text x="460" y="347" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">D: 300 GB  SQL install + backups</text>
+            <text x="460" y="362" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">E: 300 GB  Transaction logs</text>
+            <text x="460" y="377" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">F: 1 TB     Data files</text>
+
+            <rect x="440" y="395" width="200" height="30" rx="3" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="3,3"/>
+            <text x="540" y="414" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="10">NTLM auth (service account)</text>
+
+            <!-- Private link between MCP and application server -->
+            <line x1="360" y1="235" x2="438" y2="235" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="436,231 444,235 436,239" fill="#7A736C"/>
+            <text x="400" y="225" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="8">SOAP/XML</text>
+            <text x="400" y="248" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="8">(private VPC)</text>
+
+            <!-- External services -->
+            <!-- Cloudflare -->
+            <rect x="10" y="200" width="100" height="55" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>
+            <text x="60" y="222" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="10" font-weight="500">Cloudflare</text>
+            <text x="60" y="237" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">WAF + TLS</text>
+            <text x="60" y="249" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">DDoS filtering</text>
+
+            <line x1="110" y1="227" x2="148" y2="195" stroke="#943A3A" stroke-width="0.8"/>
+            <polygon points="147,199 152,192 144,194" fill="#943A3A"/>
+            <text x="123" y="202" fill="#7A736C" font-family="Outfit,sans-serif" font-size="8">:443</text>
+
             <!-- AI Platform -->
-            <rect x="20" y="120" width="130" height="60" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.8"/>
-            <text x="85" y="147" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">AI Platform</text>
-            <text x="85" y="165" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">Tool calling</text>
+            <rect x="10" y="30" width="100" height="45" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="60" y="50" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">AI Platform</text>
+            <text x="60" y="65" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">Tool calling</text>
 
-            <!-- Arrow 1 -->
-            <line x1="150" y1="150" x2="200" y2="150" stroke="#7A736C" stroke-width="1"/>
-            <polygon points="198,146 206,150 198,154" fill="#7A736C"/>
-            <text x="178" y="140" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">HTTPS</text>
-
-            <!-- MCP Server -->
-            <rect x="206" y="105" width="140" height="90" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.8"/>
-            <text x="276" y="135" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">MCP Server</text>
-            <text x="276" y="153" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">Streamable HTTP</text>
-            <text x="276" y="168" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">SOAP/XML adapter</text>
-
-            <!-- Arrow 2 up to Cognito -->
-            <line x1="276" y1="105" x2="276" y2="55" stroke="#7A736C" stroke-width="1"/>
-            <polygon points="272,57 276,49 280,57" fill="#7A736C"/>
+            <line x1="60" y1="75" x2="60" y2="198" stroke="#4A7C5C" stroke-width="0.8"/>
+            <polygon points="56,196 60,204 64,196" fill="#4A7C5C"/>
 
             <!-- Cognito -->
-            <rect x="216" y="10" width="120" height="42" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.8"/>
-            <text x="276" y="30" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">AWS Cognito</text>
-            <text x="276" y="44" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">OAuth 2.0 / PKCE</text>
+            <rect x="590" y="30" width="190" height="45" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="685" y="50" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">AWS Cognito</text>
+            <text x="685" y="65" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">OAuth 2.0 / OIDC / PKCE</text>
 
-            <!-- Arrow 3 -->
-            <line x1="346" y1="150" x2="410" y2="150" stroke="#7A736C" stroke-width="1"/>
-            <polygon points="408,146 416,150 408,154" fill="#7A736C"/>
+            <!-- Lines from AI to Cognito and from MCP auth to Cognito -->
+            <line x1="110" y1="52" x2="588" y2="52" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="4,3"/>
+            <polygon points="586,48 594,52 586,56" fill="#7A736C"/>
+            <text x="350" y="44" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="8">Token request (PKCE flow)</text>
 
-            <!-- Cloudflare Tunnel -->
-            <rect x="416" y="115" width="140" height="70" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.8"/>
-            <text x="486" y="143" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">Cloudflare Tunnel</text>
-            <text x="486" y="161" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">Zero inbound ports</text>
+            <line x1="360" y1="275" x2="685" y2="77" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="4,3"/>
+            <text x="550" y="155" fill="#7A736C" font-family="Outfit,sans-serif" font-size="8">JWKS validation</text>
 
-            <!-- Arrow 4 -->
-            <line x1="556" y1="150" x2="620" y2="150" stroke="#7A736C" stroke-width="1"/>
-            <polygon points="618,146 626,150 618,154" fill="#7A736C"/>
+            <!-- Systems Manager access -->
+            <rect x="260" y="470" width="240" height="30" rx="3" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="4,3"/>
+            <text x="380" y="489" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="10">AWS Systems Manager (zero inbound ports)</text>
 
-            <!-- Enterprise API -->
-            <rect x="626" y="115" width="150" height="70" rx="4" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.8"/>
-            <text x="701" y="143" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">Enterprise API</text>
-            <text x="701" y="161" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="10">SOAP/XML endpoints</text>
+            <line x1="265" y1="420" x2="340" y2="468" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="3,3"/>
+            <line x1="540" y1="425" x2="420" y2="468" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="3,3"/>
+          </svg>
+        </div>
+      </div>
 
-            <!-- Labels -->
-            <text x="400" y="280" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="10">Enterprise network boundary</text>
-            <line x1="400" y1="260" x2="400" y2="240" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="4,4"/>
-            <line x1="390" y1="240" x2="800" y2="240" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="4,4"/>
-            <line x1="390" y1="240" x2="390" y2="100" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="4,4"/>
-            <line x1="390" y1="100" x2="800" y2="100" stroke="#7A736C" stroke-width="0.5" stroke-dasharray="4,4"/>
+      <div class="detail-section reveal">
+        <h2>Security request flow</h2>
+        <div class="arch-diagram">
+          <svg viewBox="0 0 700 440" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <!-- Step 1: AI Platform -->
+            <rect x="20" y="10" width="220" height="40" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="130" y="28" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">1. AI platform requests token</text>
+            <text x="130" y="43" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">OAuth 2.0 Authorization Code + PKCE</text>
+
+            <line x1="240" y1="30" x2="280" y2="30" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="278,26 286,30 278,34" fill="#7A736C"/>
+
+            <!-- Step 2: Cognito -->
+            <rect x="288" y="10" width="200" height="40" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="388" y="28" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">2. Cognito issues signed JWT</text>
+            <text x="388" y="43" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">RS256, includes issuer + audience claims</text>
+
+            <!-- Arrow down -->
+            <line x1="130" y1="50" x2="130" y2="90" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="126,88 130,96 134,88" fill="#7A736C"/>
+
+            <!-- Step 3: Cloudflare -->
+            <rect x="20" y="98" width="350" height="50" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>
+            <text x="195" y="118" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">3. Request hits Cloudflare edge</text>
+            <text x="195" y="135" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">WAF rules filter malicious traffic. DDoS protection. Managed TLS.</text>
+
+            <line x1="130" y1="148" x2="130" y2="185" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="126,183 130,191 134,183" fill="#7A736C"/>
+
+            <!-- Step 4: Security group -->
+            <rect x="20" y="193" width="350" height="50" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="195" y="213" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">4. Security group allows only 2 proxy IPs</text>
+            <text x="195" y="230" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">Inbound :443 restricted to Cloudflare proxy addresses only</text>
+
+            <line x1="130" y1="243" x2="130" y2="280" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="126,278 130,286 134,278" fill="#7A736C"/>
+
+            <!-- Step 5: TLS termination -->
+            <rect x="20" y="288" width="350" height="40" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="195" y="306" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">5. TLS termination at origin, forward to :3000</text>
+            <text x="195" y="320" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">Reverse proxy decrypts, passes to MCP server on localhost</text>
+
+            <line x1="130" y1="328" x2="130" y2="355" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="126,353 130,361 134,353" fill="#7A736C"/>
+
+            <!-- Step 6: JWT validation -->
+            <rect x="20" y="363" width="350" height="50" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>
+            <text x="195" y="383" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">6. MCP server validates JWT</text>
+            <text x="195" y="400" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">Fetches JWKS from Cognito, verifies RS256 signature, issuer, audience, expiry</text>
+
+            <!-- Step 7: App server -->
+            <rect x="420" y="363" width="260" height="50" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>
+            <text x="550" y="383" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">7. SOAP call to application server (private VPC)</text>
+            <text x="550" y="400" text-anchor="middle" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">NTLM auth with service account, queries settlement data</text>
+
+            <line x1="370" y1="388" x2="418" y2="388" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="416,384 424,388 416,392" fill="#7A736C"/>
+
+            <!-- Annotations -->
+            <text x="510" y="115" fill="#943A3A" font-family="Outfit,sans-serif" font-size="10" font-weight="500">3 architecture redesigns</text>
+            <text x="510" y="132" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">V1: Direct exposure (blocked by security)</text>
+            <text x="510" y="147" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">V2: Cloudflare Tunnel (outbound-only)</text>
+            <text x="510" y="162" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">V3: Reverse proxy + restricted SG (final)</text>
+
+            <text x="510" y="200" fill="#4A7C5C" font-family="Outfit,sans-serif" font-size="10" font-weight="500">Security review</text>
+            <text x="510" y="217" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">251-page vulnerability scan (176 findings)</text>
+            <text x="510" y="232" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">Passed on first submission</text>
+            <text x="510" y="247" fill="#7A736C" font-family="Outfit,sans-serif" font-size="9">5 conditions, all addressed</text>
           </svg>
         </div>
       </div>
@@ -124,18 +266,51 @@
         <h2>Tech stack</h2>
         <div class="cert-list">
           <span class="cert">Python</span>
-          <span class="cert">MCP Protocol</span>
+          <span class="cert">FastMCP</span>
+          <span class="cert">Streamable HTTP</span>
+          <span class="cert">AWS EC2</span>
+          <span class="cert">VPC</span>
+          <span class="cert">EBS</span>
           <span class="cert">AWS Cognito</span>
-          <span class="cert">Cloudflare Tunnel</span>
-          <span class="cert">OAuth 2.0 / OIDC</span>
+          <span class="cert">IAM</span>
+          <span class="cert">Systems Manager</span>
+          <span class="cert">Cloudflare WAF</span>
+          <span class="cert">OAuth 2.0 / OIDC / PKCE</span>
+          <span class="cert">JWT (RS256)</span>
           <span class="cert">SOAP/XML</span>
-          <span class="cert">Terraform</span>
+          <span class="cert">NTLM</span>
+          <span class="cert">SQL Server</span>
+          <span class="cert">Windows Server</span>
+          <span class="cert">IIS</span>
+          <span class="cert">systemd</span>
         </div>
       </div>
 
       <div class="detail-section reveal">
+        <h2>What made this hard</h2>
+        <p>
+          MCP was released in November 2024. Connecting it to a 30-year-old enterprise system
+          through enterprise security guardrails had no reference architecture. The architecture
+          was redesigned three times in response to constraints that surfaced during deployment:
+          corporate security automation that auto-reverted public-facing security groups,
+          the edge proxy team configuring a reverse proxy instead of the requested tunnel, and
+          the AI platform team requiring OIDC/PKCE instead of API tokens.
+        </p>
+        <p>
+          Each redesign was handled without delays to the project timeline. The senior
+          infrastructure lead estimated the application server setup would take 1-2 weeks. It was
+          operational in days. The security review (251-page scan, 176 findings) passed on
+          the first submission.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
         <h2>Status</h2>
-        <p>Currently in PoC validation. Infrastructure cost model approved. Pending production deployment decision.</p>
+        <p>
+          End-to-end execution validated: MCP server authenticated via NTLM, sent SOAP POST
+          to the application server, invoked a web method, and confirmed server-side execution through database
+          log entries. PoC approved. Pending production deployment decision with client.
+        </p>
       </div>
     </div>
 
