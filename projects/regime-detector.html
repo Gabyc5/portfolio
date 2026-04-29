@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../css/style.css">
+  <script id="MathJax-script" async src="https://jsdelivr.net"></script>
 </head>
 <body>
   <nav id="nav" class="scrolled">
@@ -138,14 +139,14 @@
       <div class="detail-section reveal">
         <h2>The math</h2>
         <p>
-          Log returns: ln(P_t / P_{t-1}). Rolling volatility: standard deviation of log returns
-          over a configurable window, annualized by multiplying by the square root of 252
-          (trading days per year). The HMM treats the volatility series as emissions from a
-          latent two-state Markov chain. It learns the mean and variance of each state, the
-          transition matrix, and computes the posterior probability of stress at every time step
-          via the forward-backward algorithm.
+          Log returns: \( \ln(P_t / P_{t-1}) \). Rolling volatility: standard deviation of log returns over a configurable window, 
+          annualized by multiplying by \( \sqrt{252} \) (trading days per year). 
+          The HMM treats the volatility series as emissions from a latent two-state Markov chain. 
+          It learns the mean (\( \mu \)) and variance (\( \sigma^2 \)) of each state, the transition matrix (\( A \)), 
+          and computes the posterior probability of stress at every time step via the forward-backward algorithm.
         </p>
       </div>
+
 
       <div class="detail-section reveal">
         <h2>Tech stack</h2>
