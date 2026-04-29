@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy Regime Change Detector | Gaby Hernandez</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9650;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav id="nav" class="scrolled">
+    <a href="../index.html" class="nav-coords">&larr; Back</a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <section class="section project-detail">
+    <div class="project-detail-header reveal">
+      <div class="project-tags">
+        <span class="tag tag-gold">Python</span>
+        <span class="tag tag-blue">HMM</span>
+        <span class="tag tag-rose">Energy Risk</span>
+        <span class="tag tag-blue">Streamlit</span>
+        <span class="tag tag-gold">Plotly</span>
+      </div>
+      <h1>Energy regime change detector</h1>
+      <span class="project-context">Personal project, 2026</span>
+    </div>
+
+    <div class="project-detail-body">
+      <div class="detail-section reveal">
+        <h2>Problem</h2>
+        <p>
+          Energy markets operate in two fundamentally different states. In calm regimes,
+          volatility is low and returns are roughly normal. In stress regimes, volatility
+          spikes, distributions develop fat tails, and risk models calibrated on recent
+          history dramatically underestimate exposure.
+        </p>
+        <p>
+          In February 2022, WTI crude's annualized volatility jumped from roughly 31% to
+          79% in a matter of days. Any VaR model using the prior six months of data was
+          calculating risk against the wrong distribution. The question is simple: can you
+          detect the regime shift fast enough to adjust your parameters before the losses
+          materialize?
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Approach</h2>
+        <p>
+          The detector computes rolling log-return volatility on daily energy futures prices
+          (WTI, Brent, Natural Gas, Gasoline, Heating Oil) fetched from Yahoo Finance.
+          A two-state Gaussian Hidden Markov Model is fit to the volatility series. The HMM
+          learns two distributions (calm and stress), the transition probabilities between them,
+          and the posterior probability of being in each state at every time step.
+        </p>
+        <p>
+          A separate changepoint detection layer (PELT algorithm) identifies structural breaks
+          where the statistical properties of the volatility series change. The dashboard
+          shows a "stress probability" in real time and fires alerts when it crosses a
+          configurable threshold.
+        </p>
+        <p>
+          The interface is styled as a financial broadsheet. Regime status reads as a headline,
+          key metrics appear in a typeset stat row, and the charts use a clean editorial palette.
+          The model recalibrates on every page load with current market data.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Architecture</h2>
+        <div class="arch-diagram">
+          <svg viewBox="0 0 700 280" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <!-- Data source -->
+            <rect x="20" y="40" width="130" height="45" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="85" y="58" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">Yahoo Finance</text>
+            <text x="85" y="74" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">Daily OHLCV via yfinance</text>
+
+            <line x1="150" y1="62" x2="195" y2="62" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="193,58 201,62 193,66" fill="#7A736C"/>
+
+            <!-- Log returns -->
+            <rect x="203" y="40" width="130" height="45" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="268" y="58" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">Log returns</text>
+            <text x="268" y="74" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">ln(P_t / P_{t-1})</text>
+
+            <line x1="333" y1="62" x2="378" y2="62" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="376,58 384,62 376,66" fill="#7A736C"/>
+
+            <!-- Rolling vol -->
+            <rect x="386" y="40" width="140" height="45" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="456" y="58" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">Rolling volatility</text>
+            <text x="456" y="74" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">std(window) x sqrt(252)</text>
+
+            <!-- Branch to HMM and PELT -->
+            <line x1="456" y1="85" x2="456" y2="110" stroke="#7A736C" stroke-width="0.8"/>
+
+            <!-- HMM -->
+            <line x1="456" y1="110" x2="320" y2="140" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="322,136 316,144 326,142" fill="#7A736C"/>
+
+            <rect x="220" y="142" width="200" height="50" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>
+            <text x="320" y="162" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">2-state Gaussian HMM</text>
+            <text x="320" y="178" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">Calm vs. stress classification</text>
+
+            <!-- PELT -->
+            <line x1="456" y1="110" x2="590" y2="140" stroke="#7A736C" stroke-width="0.8"/>
+            <polygon points="588,136 594,144 584,142" fill="#7A736C"/>
+
+            <rect x="530" y="142" width="150" height="50" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>
+            <text x="605" y="162" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">PELT changepoints</text>
+            <text x="605" y="178" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">Structural break detection</text>
+
+            <!-- Dashboard -->
+            <line x1="320" y1="192" x2="420" y2="230" stroke="#7A736C" stroke-width="0.8"/>
+            <line x1="605" y1="192" x2="505" y2="230" stroke="#7A736C" stroke-width="0.8"/>
+
+            <rect x="350" y="232" width="220" height="40" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="460" y="250" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">Streamlit dashboard</text>
+            <text x="460" y="264" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">Newspaper-styled regime monitor</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>The math</h2>
+        <p>
+          Log returns: ln(P_t / P_{t-1}). Rolling volatility: standard deviation of log returns
+          over a configurable window, annualized by multiplying by the square root of 252
+          (trading days per year). The HMM treats the volatility series as emissions from a
+          latent two-state Markov chain. It learns the mean and variance of each state, the
+          transition matrix, and computes the posterior probability of stress at every time step
+          via the forward-backward algorithm.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Tech stack</h2>
+        <div class="cert-list">
+          <span class="cert">Python</span>
+          <span class="cert">Streamlit</span>
+          <span class="cert">Plotly</span>
+          <span class="cert">yfinance</span>
+          <span class="cert">hmmlearn</span>
+          <span class="cert">ruptures</span>
+          <span class="cert">pandas</span>
+          <span class="cert">NumPy</span>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Status</h2>
+        <p>
+          Live and deployed. Source on
+          <a href="https://github.com/Gabyc5/regime-detector" target="_blank" rel="noopener"
+             style="color: var(--accent-red-bright); border-bottom: 1px solid var(--accent-red-bright);">
+            GitHub</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="project-nav reveal">
+      <a href="bug-report.html" class="btn-ghost">&larr; Previous project</a>
+      <a href="../index.html#work" class="btn-ghost">All projects &rarr;</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Gaby Hernandez</span>
+      <div class="footer-links">
+        <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:gcg.hdezg@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+  <script src="../js/main.js"></script>
+</body>
+</html>
