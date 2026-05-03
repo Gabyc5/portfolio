@@ -30,12 +30,13 @@
   <section class="hero" id="top">
     <canvas id="terrain-canvas"></canvas>
     <div class="hero-content">
-      <h1 class="reveal">I architect the invisible connections that keep complex systems running.</h1>
+      <h1 class="reveal">I build the infrastructure that makes enterprise systems talk to each other.</h1>
       <p class="hero-sub reveal" data-delay="1">
-        Hello! I'm <span class="name-highlight">Gaby</span>. I build AI agent systems and cloud infrastructure that wire enterprise
-        platforms to internal tools. MCP protocol, AWS, custom API integrations. Before this
-        I built mission-critical systems at <strong>NASA</strong>, cloud infrastructure at <strong>AWS</strong>, and
-        sensor data pipelines at <strong>Chevron</strong>.
+        Hello! I'm <span class="name-highlight">Gaby</span>. I work on AI agent systems and cloud infrastructure,
+        connecting enterprise platforms to internal tools through MCP servers, AWS, and
+        custom API integrations. Before this I built mission-critical systems at
+        <strong>NASA</strong>, cloud infrastructure at <strong>AWS</strong>, and sensor
+        data pipelines at <strong>Chevron</strong>.
       </p>
       <div class="hero-actions reveal" data-delay="2">
         <a href="#work" class="btn-primary">See my work</a>
@@ -246,24 +247,12 @@
     </div>
   </section>
 
-  <section class="section cta-section" id="services">
-    <div class="cta-card reveal">
-      <h3>Available for select projects</h3>
-      <p>
-        I take on freelance work in AI agent development, cloud infrastructure (AWS),
-        enterprise system integration, and internal tool automation. If you need help
-        connecting internal platforms, building on AWS, or automating workflows with
-        MCP protocol, let's talk.
-      </p>
-      <a href="#contact" class="btn-primary">Get in touch</a>
-    </div>
-  </section>
 
   <section class="section contact-section" id="contact">
     <div class="contact-inner reveal">
       <h2>Say hello.</h2>
-      <p>Open to conversations about cloud infrastructure, AI agent development,
-        or interesting problems in general.</p>
+      <p>I like talking about cloud infrastructure, AI agent systems,
+        and hard integration problems. Say hello if you have one.</p>
       <a href="mailto:gcg.hdezg@gmail.com" class="contact-email">gcg.hdezg@gmail.com</a>
       <div class="contact-links">
         <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
@@ -286,5 +275,29 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="js/terrain.js"></script>
   <script src="js/main.js"></script>
+
+  <!-- UTM source tracking -->
+  <script>
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    var source = params.get('utm_source');
+    if (source) {
+      var data = {
+        source: source,
+        medium: params.get('utm_medium') || '',
+        campaign: params.get('utm_campaign') || '',
+        timestamp: new Date().toISOString(),
+        referrer: document.referrer || '',
+        page: window.location.pathname
+      };
+      navigator.sendBeacon && navigator.sendBeacon(
+        'https://track.gabyhernandez.dev/visit',
+        new Blob([JSON.stringify(data)], { type: 'application/json' })
+      );
+      // Clean URL without reload
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  })();
+  </script>
 </body>
 </html>
