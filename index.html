@@ -276,11 +276,11 @@
   <script src="js/terrain.js"></script>
   <script src="js/main.js"></script>
 
-  <!-- UTM source tracking -->
+  <!-- Visit source tracking -->
   <script>
   (function() {
     var params = new URLSearchParams(window.location.search);
-    var source = params.get('utm_source');
+    var source = params.get('utm_source') || params.get('ref');
     if (source) {
       var data = {
         source: source,
@@ -294,7 +294,6 @@
         'https://track.gabyhernandez.dev/visit',
         new Blob([JSON.stringify(data)], { type: 'application/json' })
       );
-      // Clean URL without reload
       window.history.replaceState({}, '', window.location.pathname);
     }
   })();
