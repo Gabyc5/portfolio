@@ -177,15 +177,15 @@
           vulnerabilities mapped to real CVEs. Same pattern as DVWA or Juice Shop. The
           server exposes six tools, each with intentional flaws:
         </p>
-        <p>
-          <code>run_command</code> accepts raw shell input (CVE-2025-68143).
-          <code>read_file</code> has no path validation (CVE-2025-68145).
-          <code>query_database</code> takes unsanitized SQL.
-          <code>get_user_info</code> leaks API keys in responses.
-          <code>internal_tool</code> has a poisoned description with hidden instructions
-          targeting AI agents (CVE-2026-30615).
-          <code>echo</code> reflects input for response injection testing.
-        </p>
+        <ul>
+          <li><code>run_command</code> accepts raw shell input (CVE-2025-68143).</li>
+          <li><code>read_file</code> has no path validation (CVE-2025-68145).</li>
+          <li><code>query_database</code> takes unsanitized SQL.</li>
+          <li><code>get_user_info</code> leaks API keys in responses.</li>
+          <li><code>internal_tool</code> has a poisoned description with hidden instructions
+        targeting AI agents (CVE-2026-30615).</li>
+          <li><code>echo</code> reflects input for response injection testing.</li>
+        </ul>
       </div>
 
       <div class="detail-section reveal">
