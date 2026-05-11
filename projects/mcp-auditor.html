@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MCP Security Auditor | Gaby Hernandez</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9650;</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <nav id="nav" class="scrolled">
+    <a href="../index.html" class="nav-coords">&larr; Back</a>
+    <div class="nav-links">
+      <a href="../index.html#work">Work</a>
+      <a href="../index.html#about">About</a>
+      <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+      <a href="../index.html#contact">Contact</a>
+    </div>
+  </nav>
+
+  <section class="section project-detail">
+    <div class="project-detail-header reveal">
+      <div class="project-tags">
+        <span class="tag tag-gold">Python</span>
+        <span class="tag tag-blue">MCP</span>
+        <span class="tag tag-rose">Security</span>
+        <span class="tag tag-blue">Docker</span>
+      </div>
+      <h1>MCP server security auditor</h1>
+      <span class="project-context">Personal project, 2026</span>
+    </div>
+
+    <div class="project-detail-body">
+      <div class="detail-section reveal">
+        <h2>Problem</h2>
+        <p>
+          Model Context Protocol is the open standard AI agents use to call external tools.
+          Adoption exploded in 2025 and 2026: over 150 million downloads, thousands of
+          community-built servers, integrations in every major AI IDE. The security tooling
+          did not keep up.
+        </p>
+        <p>
+          In April 2026, OX Security disclosed a systemic RCE vulnerability in the core
+          protocol affecting every implementation. Anthropic's own reference server
+          (mcp-server-git) had three CVEs including command injection and path traversal.
+          Cursor, VS Code, Windsurf, Claude Code, and Gemini-CLI were all found vulnerable
+          to prompt injection through MCP tool descriptions. One exploit (Windsurf,
+          CVE-2026-30615) required zero user interaction.
+        </p>
+        <p>
+          API scanners don't understand MCP's tool discovery model. WAFs can't validate
+          agent identity. There is no established security scanner for MCP servers.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Approach</h2>
+        <p>
+          Built a Python CLI scanner that connects to any MCP server, discovers its tools
+          via the JSON-RPC protocol, and runs modular security checks against them. Each
+          check probes a specific vulnerability category and produces severity-ranked
+          findings with remediation guidance.
+        </p>
+        <p>
+          The scanner tests for: unauthenticated access, weak credentials, overly permissive
+          input schemas, dangerous parameter types (raw shell commands, file paths, SQL),
+          tool description poisoning (hidden instructions aimed at AI agents), response
+          injection, secrets leaking in tool metadata, verbose error messages exposing
+          internals, missing TLS, wildcard CORS, and absent rate limiting.
+        </p>
+        <p>
+          Ships with a deliberately vulnerable MCP server (runs in Docker) that has labeled
+          security flaws mapped to real CVEs. Same concept as DVWA or OWASP Juice Shop,
+          but for the MCP protocol. The vulnerable server exposes tools with command
+          injection, path traversal, SQL injection, secrets in metadata, and a poisoned
+          tool description that attempts to trick AI agents into exfiltrating data.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Architecture</h2>
+        <div class="arch-diagram">
+          <svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg" width="100%">
+            <!-- CLI -->
+            <rect x="250" y="10" width="200" height="40" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.8"/>
+            <text x="350" y="28" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">CLI entry point</text>
+            <text x="350" y="42" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">python -m auditor scan &lt;url&gt;</text>
+
+            <!-- Arrow -->
+            <line x1="350" y1="50" x2="350" y2="75" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="346,73 350,81 354,73" fill="#7A736C"/>
+
+            <!-- Scanner core -->
+            <rect x="200" y="83" width="300" height="45" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.8"/>
+            <text x="350" y="103" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="12" font-weight="500">Scanner orchestrator</text>
+            <text x="350" y="118" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">Connect, discover tools, run checks</text>
+
+            <!-- Branch to MCP Client and Check Runner -->
+            <line x1="300" y1="128" x2="180" y2="158" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="182,154 176,162 186,160" fill="#7A736C"/>
+            <line x1="400" y1="128" x2="520" y2="158" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="518,154 524,162 514,160" fill="#7A736C"/>
+
+            <!-- MCP Client -->
+            <rect x="80" y="160" width="200" height="45" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="180" y="180" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">MCP client (JSON-RPC)</text>
+            <text x="180" y="195" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">initialize / tools/list / tools/call</text>
+
+            <!-- Check modules -->
+            <rect x="420" y="160" width="200" height="45" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>
+            <text x="520" y="180" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">Check modules</text>
+            <text x="520" y="195" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">auth | schema | injection | leakage | transport</text>
+
+            <!-- Arrow from client to target -->
+            <line x1="180" y1="205" x2="180" y2="270" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="176,268 180,276 184,268" fill="#7A736C"/>
+
+            <!-- Arrow from checks to reporter -->
+            <line x1="520" y1="205" x2="520" y2="270" stroke="#7A736C" stroke-width="1"/>
+            <polygon points="516,268 520,276 524,268" fill="#7A736C"/>
+
+            <!-- Target server -->
+            <rect x="70" y="278" width="220" height="50" rx="4" fill="#2A2A2E" stroke="#943A3A" stroke-width="0.6"/>
+            <text x="180" y="298" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">Target MCP server</text>
+            <text x="180" y="313" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">Vulnerable test server (Docker)</text>
+            <text x="180" y="323" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">or any MCP server on the network</text>
+
+            <!-- Reporter -->
+            <rect x="420" y="278" width="200" height="50" rx="4" fill="#2A2A2E" stroke="#4A7C5C" stroke-width="0.6"/>
+            <text x="520" y="298" text-anchor="middle" fill="#F0ECE6" font-family="Outfit,sans-serif" font-size="11" font-weight="500">Report generator</text>
+            <text x="520" y="313" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">Markdown + JSON output</text>
+            <text x="520" y="323" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">Severity-ranked findings</text>
+
+            <!-- Check detail labels -->
+            <rect x="20" y="350" width="100" height="28" rx="3" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.4"/>
+            <text x="70" y="368" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">AUTH-001/002</text>
+
+            <rect x="135" y="350" width="110" height="28" rx="3" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.4"/>
+            <text x="190" y="368" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">SCHEMA-001/002</text>
+
+            <rect x="260" y="350" width="105" height="28" rx="3" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.4"/>
+            <text x="312" y="368" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">INJECT-001/002</text>
+
+            <rect x="380" y="350" width="95" height="28" rx="3" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.4"/>
+            <text x="427" y="368" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">LEAK-001/002</text>
+
+            <rect x="490" y="350" width="100" height="28" rx="3" fill="#2A2A2E" stroke="#7A736C" stroke-width="0.4"/>
+            <text x="540" y="368" text-anchor="middle" fill="#A39B92" font-family="Outfit,sans-serif" font-size="9">TRANSPORT/RATE</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Security checks</h2>
+        <div class="cert-list">
+          <span class="cert">AUTH-001: No authentication</span>
+          <span class="cert">AUTH-002: Weak credentials</span>
+          <span class="cert">SCHEMA-001: Permissive schemas</span>
+          <span class="cert">SCHEMA-002: Dangerous params</span>
+          <span class="cert">INJECT-001: Tool poisoning</span>
+          <span class="cert">INJECT-002: Response injection</span>
+          <span class="cert">LEAK-001: Secrets in metadata</span>
+          <span class="cert">LEAK-002: Verbose errors</span>
+          <span class="cert">TRANSPORT-001: No TLS</span>
+          <span class="cert">TRANSPORT-002: Wildcard CORS</span>
+          <span class="cert">RATE-001: No rate limiting</span>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Vulnerable test server</h2>
+        <p>
+          The project includes a deliberately insecure MCP server (Docker) with labeled
+          vulnerabilities mapped to real CVEs. Same pattern as DVWA or Juice Shop. The
+          server exposes six tools, each with intentional flaws:
+        </p>
+        <p>
+          <code>run_command</code> accepts raw shell input (CVE-2025-68143).
+          <code>read_file</code> has no path validation (CVE-2025-68145).
+          <code>query_database</code> takes unsanitized SQL.
+          <code>get_user_info</code> leaks API keys in responses.
+          <code>internal_tool</code> has a poisoned description with hidden instructions
+          targeting AI agents (CVE-2026-30615).
+          <code>echo</code> reflects input for response injection testing.
+        </p>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Tech stack</h2>
+        <div class="cert-list">
+          <span class="cert">Python</span>
+          <span class="cert">JSON-RPC</span>
+          <span class="cert">MCP Protocol</span>
+          <span class="cert">Docker</span>
+          <span class="cert">Regex pattern matching</span>
+          <span class="cert">SQLite (test server)</span>
+        </div>
+      </div>
+
+      <div class="detail-section reveal">
+        <h2>Status</h2>
+        <p>
+          Complete and functional. Source on
+          <a href="https://github.com/Gabyc5/mcp-security-auditor" target="_blank" rel="noopener"
+             style="color: var(--accent-red-bright); border-bottom: 1px solid var(--accent-red-bright);">
+            GitHub</a>.
+        </p>
+      </div>
+    </div>
+
+    <div class="project-nav reveal">
+      <a href="regime-detector.html" class="btn-ghost">&larr; Previous project</a>
+      <a href="../index.html#work" class="btn-ghost">All projects &rarr;</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-name">Gaby Hernandez</span>
+      <div class="footer-links">
+        <a href="https://github.com/Gabyc5" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/gaby-hernandez-gomez/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="mailto:gcg.hdezg@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
+  <script src="../js/main.js"></script>
+</body>
+</html>
